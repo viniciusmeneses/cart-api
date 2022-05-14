@@ -8,7 +8,7 @@ export class Product {
   @Column()
   public name: string;
 
-  @Column()
+  @Column({ type: "integer" })
   public stock: number;
 
   @CreateDateColumn({ name: "created_at" })
