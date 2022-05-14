@@ -20,4 +20,5 @@ module.exports = {
     "@tests/(.*)": "<rootDir>/tests/$1",
   },
   transform: { "^.+\\.ts$": ["ts-jest"] },
+  setupFilesAfterEnv: ["./jest.setup.ts"],
 };
