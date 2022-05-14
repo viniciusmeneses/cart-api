@@ -1,0 +1,10 @@
+{
+  "name": "loja-integrada-carrinho",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Vinicius Meneses <vinicius.meneses04@gmail.com>",
+  "license": "MIT",
+  "engines": {
+    "node": "16.x"
+  }
+}
