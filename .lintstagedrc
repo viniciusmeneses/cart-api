@@ -1,6 +1,7 @@
 {
   "*.ts": [
     "eslint --cache --fix",
-    "prettier --write"
+    "prettier --write",
+    "yarn test --findRelatedTests"
   ]
 }
