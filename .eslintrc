@@ -29,6 +29,17 @@
     "no-eq-null": "off",
     "@typescript-eslint/method-signature-style": ["error", "method"],
     "@typescript-eslint/no-parameter-properties": "off",
-    "@typescript-eslint/no-namespace": "off"
+    "@typescript-eslint/no-namespace": "off",
+    "@typescript-eslint/naming-convention": [
+      "error",
+      {
+        "selector": "interface",
+        "format": ["PascalCase"],
+        "custom": {
+          "regex": "^I[A-Z]",
+          "match": true
+        }
+      }
+    ]
   }
 }
