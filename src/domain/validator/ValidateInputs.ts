@@ -5,10 +5,15 @@ import { flatten, values } from "rambda";
 import { FieldValidationError } from "./errors/FieldValidationError";
 import { ValidationErrors } from "./errors";
 
-const toFieldValidationError = (rootError: ClassValidationError): FieldValidationError[] => {
-  const getCurrentErrors = ({ property, constraints }: ClassValidationError): FieldValidationError[] => {
+const addPropertyToPath = (path, property) => {
+  const isIndexProperty = !isNaN(parseInt(property, 10));
+  return path + (isIndexProperty ? `[${property}]` : `.${property}`);
+};
+
+const toFieldValidationErrors = (rootError: ClassValidationError): FieldValidationError[] => {
+  const getCurrentErrors = ({ property, constraints }: ClassValidationError) => {
     const errors = values(constraints).map((message) => new FieldValidationError(property, message));
-    return flatten(errors);
+    return flatten<FieldValidationError>(errors);
   };
 
   const getChildrenErrors = ({
@@ -19,25 +24,21 @@ const toFieldValidationError = (rootError: ClassValidationError): FieldValidatio
     path: string;
     children: ClassValidationError[];
     errors?: FieldValidationError[];
-  }): FieldValidationError[] => {
-    const nextErrors = [...errors];
+  }) => {
+    const childrenErrors = children.map((error) => {
+      const nextPath = addPropertyToPath(path, error.property);
+      const errors = error.constraints != null ? getCurrentErrors({ ...error, property: nextPath }) : [];
 
-    const childrenErrors = children.map((error, i) => {
-      const nextPath = `${path}[${i}].${error.property}`;
-
-      if (error.constraints != null) nextErrors.push(...getCurrentErrors({ ...error, property: nextPath }));
-      if (error.children != null)
-        return getChildrenErrors({ path: nextPath, children: error.children, errors: nextErrors });
-
-      return nextErrors;
+      if (error.children == null) return errors;
+      return getChildrenErrors({ path: nextPath, children: error.children, errors: errors });
     });
 
-    return flatten(childrenErrors);
+    return flatten<FieldValidationError>([...errors, childrenErrors]);
   };
 
   return [
     ...getCurrentErrors(rootError),
-    ...(rootError.children ? getChildrenErrors({ path: rootError.property, children: rootError.children }) : []),
+    ...getChildrenErrors({ path: rootError.property, children: rootError.children ?? [] }),
   ];
 };
 
@@ -60,8 +61,8 @@ export function ValidateInputs(target: Object, propertyKey: string | symbol, des
       await Promise.all(validationPromises);
     } catch (error) {
       if (error instanceof Error) throw error;
-      const fieldValidationErrors = (error as ClassValidationError[]).map((error) => toFieldValidationError(error));
-      throw new ValidationErrors(flatten(fieldValidationErrors));
+      const fieldValidationErrors = error.flatMap(toFieldValidationErrors);
+      throw new ValidationErrors(fieldValidationErrors);
     }
 
     return await method.apply(this, inputs);
