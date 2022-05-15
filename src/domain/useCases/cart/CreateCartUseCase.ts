@@ -17,10 +17,8 @@ export class CreateCartUseCase implements ICreateCartUseCase {
   ) {}
 
   @ValidateInputs
-  public async execute(dto?: ICreateCartUseCase.Input): Promise<Cart> {
-    if (dto?.items?.length > 0) {
-      const { items } = dto;
-
+  public async execute({ items }: ICreateCartUseCase.Input = {}): Promise<Cart> {
+    if (items?.length > 0) {
       const products = await this.productsRepository.findByIds(items.map(prop("productId")));
       const productsById = indexBy(prop("id"), products);
 
@@ -31,6 +29,6 @@ export class CreateCartUseCase implements ICreateCartUseCase {
       }
     }
 
-    return this.cartsRepository.create(dto);
+    return this.cartsRepository.create({ items });
   }
 }
