@@ -4,7 +4,7 @@ import { IsInt, IsPositive, IsUUID, ValidateNested } from "class-validator";
 import { Cart } from "@domain/entities/Cart";
 
 export interface ICreateCartUseCase {
-  execute(dto: ICreateCartUseCase.Input): Promise<ICreateCartUseCase.Result>;
+  execute(dto?: ICreateCartUseCase.Input): Promise<ICreateCartUseCase.Result>;
 }
 
 export namespace ICreateCartUseCase {
