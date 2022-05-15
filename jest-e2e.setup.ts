@@ -1,1 +1,1 @@
-import "./src/main/config/container";
+import "./src/main/container";
