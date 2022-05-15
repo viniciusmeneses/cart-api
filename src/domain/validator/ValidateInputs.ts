@@ -51,7 +51,7 @@ export function ValidateInputs(target: Object, propertyKey: string | symbol, des
       const validationPromises = inputTypes.map((Class, index) => {
         if (!Class.toString().startsWith("class ")) return Promise.resolve();
 
-        return validateOrReject(plainToInstance(Class, inputs[index]), {
+        return validateOrReject(plainToInstance(Class, inputs[index] ?? {}), {
           validationError: { target: false },
           forbidUnknownValues: true,
         });
