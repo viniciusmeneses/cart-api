@@ -11,6 +11,9 @@ export class Product {
   @Column({ type: "integer" })
   public stock: number;
 
+  @Column({ type: "decimal" })
+  public price: number;
+
   @CreateDateColumn({ name: "created_at" })
   public createdAt: Date;
 
