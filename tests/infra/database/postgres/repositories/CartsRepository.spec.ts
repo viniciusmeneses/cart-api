@@ -1,6 +1,9 @@
 import { Cart } from "@domain/entities/Cart";
+import faker from "@faker-js/faker";
 import { CartsRepository, PostgresConnection } from "@infra/database/postgres";
-import { makeFakeCart } from "@tests/domain/fakes";
+import { makeFakeCart, makeFakeCartItem } from "@tests/domain/fakes";
+
+const fakeCart = makeFakeCart({ id: faker.datatype.uuid(), items: [] });
 
 PostgresConnection.prototype.getRepository = jest.fn().mockReturnValue({ create: jest.fn(), save: jest.fn() });
 
@@ -31,7 +34,6 @@ describe("CartsRepository", () => {
 
     it("Should return a new cart on success", async () => {
       const sut = makeSut();
-      const fakeCart = { ...makeFakeCart(), items: [] };
 
       jest.spyOn(cartsRepositoryMock, "save").mockResolvedValueOnce(fakeCart);
       const createdCart = await sut.create();
@@ -41,12 +43,15 @@ describe("CartsRepository", () => {
 
     it("Should return a new cart with items on success", async () => {
       const sut = makeSut();
-      const fakeCart = makeFakeCart();
+      const fakeCartWithItems = {
+        ...fakeCart,
+        items: [makeFakeCartItem({ cartId: fakeCart.id, productId: faker.datatype.uuid() })],
+      };
 
-      jest.spyOn(cartsRepositoryMock, "save").mockResolvedValueOnce(fakeCart);
-      const createdCart = await sut.create({ items: fakeCart.items });
+      jest.spyOn(cartsRepositoryMock, "save").mockResolvedValueOnce(fakeCartWithItems);
+      const createdCart = await sut.create({ items: fakeCartWithItems.items });
 
-      expect(createdCart).toEqual(fakeCart);
+      expect(createdCart).toEqual(fakeCartWithItems);
     });
   });
 });

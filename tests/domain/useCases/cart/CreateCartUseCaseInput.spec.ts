@@ -2,7 +2,7 @@ import { plainToInstance } from "class-transformer";
 
 import { ICreateCartUseCase } from "@domain/ports/useCases/cart/ICreateCartUseCase";
 import faker from "@faker-js/faker";
-import { makeFakeCreateCartInput } from "@tests/domain/fakes/cart";
+import { makeFakeCartItem } from "@tests/domain/fakes";
 
 import { validateSut } from "../../helpers";
 
@@ -28,7 +28,11 @@ describe("ICreateCartUseCase.Input", () => {
   });
 
   it("Should not throw if input is valid", async () => {
-    const sut = makeSut(makeFakeCreateCartInput());
+    const fakeItem = { amount: faker.datatype.number({ min: 0 }), productId: faker.datatype.uuid() };
+
+    const sut = makeSut({
+      items: [fakeItem],
+    });
     await expect(validateSut(sut)).resolves.toBeUndefined();
   });
 });
