@@ -3,7 +3,7 @@ import { DataSource, Repository } from "typeorm";
 import { NotConnectedError, PostgresConnection } from "@infra/database/postgres";
 import dataSource from "@infra/database/postgres/dataSource";
 
-interface SutTypes {
+interface ISutTypes {
   sut: PostgresConnection;
   dataSourceMock: jest.Mocked<DataSource & { isInitialized: boolean }>;
 }
@@ -14,9 +14,9 @@ class DummyEntity {
   public id: string;
 }
 
-const makeSut = (): SutTypes => {
+const makeSut = (): ISutTypes => {
   const sut = new PostgresConnection();
-  const dataSourceMock = dataSource as SutTypes["dataSourceMock"];
+  const dataSourceMock = dataSource as ISutTypes["dataSourceMock"];
   dataSourceMock.isInitialized = true;
   return { sut, dataSourceMock };
 };
