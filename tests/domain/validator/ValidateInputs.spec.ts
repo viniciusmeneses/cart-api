@@ -70,14 +70,8 @@ describe("ValidateInputs Decorator", () => {
 
   it("Should throw ValidationError if ClassValidator.validateOrReject throws", async () => {
     const sut = makeSut();
-    const fakeValidatorError = new ClassValidationError();
 
-    jest
-      .mocked(validateOrReject)
-      .mockRejectedValueOnce([
-        fakeValidatorError,
-        { ...fakeValidatorError, property: "data", constraints: { data: "error" } },
-      ]);
+    jest.mocked(validateOrReject).mockRejectedValueOnce([{ property: "data", constraints: { data: "error" } }]);
     const promise = sut.execute(fakeInput);
 
     await expect(promise).rejects.toThrowError(new ValidationErrors([new FieldValidationError("data", "error")]));

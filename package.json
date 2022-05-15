@@ -46,6 +46,7 @@
     "class-validator": "^0.13.2",
     "dotenv": "^16.0.0",
     "pg": "^8.7.3",
+    "rambda": "^7.1.4",
     "reflect-metadata": "^0.1.13",
     "tsyringe": "^4.6.0",
     "typeorm": "^0.3.6"
