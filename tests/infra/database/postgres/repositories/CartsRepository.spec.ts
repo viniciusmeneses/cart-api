@@ -30,10 +30,11 @@ describe("CartsRepository", () => {
       expect(cartsRepositoryMock.save).toHaveBeenCalledTimes(1);
     });
 
-    it("Should call Repository.findOne", async () => {
+    it("Should call findById", async () => {
       const sut = makeSut();
+      const findByIdSpy = jest.spyOn(sut, "findById");
       await sut.create();
-      expect(cartsRepositoryMock.findOne).toHaveBeenCalledTimes(1);
+      expect(findByIdSpy).toHaveBeenCalledTimes(1);
     });
 
     it("Should throw if Repository.save throws", async () => {
@@ -55,10 +56,37 @@ describe("CartsRepository", () => {
         items: [makeFakeCartItem({ cartId: fakeCart.id, productId: faker.datatype.uuid() })],
       };
 
-      jest.spyOn(cartsRepositoryMock, "findOne").mockResolvedValueOnce(fakeCartWithItems);
+      jest.spyOn(sut, "findById").mockResolvedValueOnce(fakeCartWithItems);
       const createdCart = await sut.create({ items: fakeCartWithItems.items });
 
       expect(createdCart).toEqual(fakeCartWithItems);
+    });
+  });
+
+  describe("findById", () => {
+    it("Should call Repository.findOne", async () => {
+      const sut = makeSut();
+      await sut.findById(fakeCart.id);
+      expect(cartsRepositoryMock.findOne).toHaveBeenCalledTimes(1);
+    });
+
+    it("Should throw if Repository.findOne throws", async () => {
+      const sut = makeSut();
+      jest.spyOn(cartsRepositoryMock, "findOne").mockRejectedValueOnce(new Error());
+      await expect(sut.findById(fakeCart.id)).rejects.toThrow();
+    });
+
+    it("Should return a cart on success", async () => {
+      const sut = makeSut();
+      const createdCart = await sut.findById(fakeCart.id);
+      expect(createdCart).toEqual(fakeCart);
+    });
+
+    it("Should not return a cart if id not exists", async () => {
+      const sut = makeSut();
+      cartsRepositoryMock.findOne.mockResolvedValueOnce(null);
+      const noneProduct = await sut.findById(fakeCart.id);
+      expect(noneProduct).toBeFalsy();
     });
   });
 });

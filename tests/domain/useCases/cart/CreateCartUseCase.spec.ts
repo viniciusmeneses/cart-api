@@ -33,13 +33,13 @@ const fakeProduct = makeFakeProduct({ id: fakeProductId });
 const fakeCreateCartInput: ICreateCartInput = { items: fakeCart.items };
 
 const makeCartsRepositoryMock = () => {
-  const cartsRepositoryMock = new CartsRepository() as MockedICartsRepository;
+  const cartsRepositoryMock = jest.mocked(new CartsRepository());
   cartsRepositoryMock.create.mockResolvedValue(fakeCart);
   return cartsRepositoryMock;
 };
 
 const makeProductsRepositoryMock = () => {
-  const productsRepositoryMock = new ProductsRepository() as MockedIProductsRepository;
+  const productsRepositoryMock = jest.mocked(new ProductsRepository());
   productsRepositoryMock.findByIds.mockResolvedValue([fakeProduct]);
   return productsRepositoryMock;
 };
