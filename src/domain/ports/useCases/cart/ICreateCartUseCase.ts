@@ -1,5 +1,5 @@
 import { Type } from "class-transformer";
-import { IsInt, IsPositive, IsUUID, ValidateNested } from "class-validator";
+import { ArrayUnique, IsInt, IsOptional, IsPositive, IsUUID, ValidateNested } from "class-validator";
 
 import { Cart } from "@domain/entities/Cart";
 
@@ -18,6 +18,8 @@ export namespace ICreateCartUseCase {
   }
 
   export class Input {
+    @IsOptional()
+    @ArrayUnique<CartItemInput>((item) => item.productId)
     @ValidateNested({ each: true })
     @Type(() => CartItemInput)
     public items?: CartItemInput[];

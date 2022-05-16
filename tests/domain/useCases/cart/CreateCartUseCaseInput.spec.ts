@@ -17,6 +17,18 @@ describe("ICreateCartUseCase.Input", () => {
       ]);
     });
 
+    it("Should throw if product id is not unique", async () => {
+      const fakeProductId = faker.datatype.uuid();
+      const sut = makeSut({
+        items: [
+          { productId: fakeProductId, amount: 1 },
+          { productId: fakeProductId, amount: 1 },
+        ],
+      });
+
+      await expect(validateSut(sut)).rejects.toMatchObject([{ property: "items", children: [] }]);
+    });
+
     it("Should throw if amount is not positive", async () => {
       const sut = makeSut({ items: [{ productId: faker.datatype.uuid(), amount: 0 }] });
 
