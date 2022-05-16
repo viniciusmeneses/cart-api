@@ -1,5 +1,6 @@
 import { ICartsRepository } from "@domain/ports/repositories/ICartsRepository";
 import { LoadCartUseCase } from "@domain/useCases/cart";
+import { CartNotExistsError } from "@domain/useCases/errors/CartNotExists";
 import { ValidationErrors } from "@domain/validator";
 import faker from "@faker-js/faker";
 import { CartsRepository } from "@infra/database/postgres";
@@ -47,6 +48,12 @@ describe("LoadCartUseCase", () => {
 
     expect(cartsRepositoryMock.findById).toBeCalledTimes(1);
     expect(cartsRepositoryMock.findById).toBeCalledWith(fakeCart.id);
+  });
+
+  it("Should throw CartNotExistsError if cart id does not exists", async () => {
+    const { sut, cartsRepositoryMock } = makeSut();
+    cartsRepositoryMock.findById.mockResolvedValue(null);
+    await expect(sut.execute(fakeCart)).rejects.toThrowError(CartNotExistsError);
   });
 
   it("Should throw if CartsRepository.findById throws", async () => {
