@@ -51,7 +51,7 @@ const makeSut = (): ISutTypes => {
   return { sut, cartsRepositoryMock, productsRepositoryMock };
 };
 
-describe("CreateAdminUseCase", () => {
+describe("CreateCartUseCase", () => {
   it("Should throw ValidationErrors if any param is invalid", async () => {
     const { sut } = makeSut();
     const promise = sut.execute({ items: [{ productId: null, amount: null }] });
