@@ -1,9 +1,7 @@
 import { container } from "tsyringe";
 
-import { IProductsRepository } from "@domain/ports/repositories";
-import { ICartsRepository } from "@domain/ports/repositories/ICartsRepository";
-import { ICreateCartUseCase } from "@domain/ports/useCases/cart/ICreateCartUseCase";
-import { ILoadCartUseCase } from "@domain/ports/useCases/cart/ILoadCartUseCase";
+import { ICartsRepository, IProductsRepository } from "@domain/ports/repositories";
+import { ICreateCartUseCase, ILoadCartUseCase } from "@domain/ports/useCases/cart";
 import { CreateCartUseCase, LoadCartUseCase } from "@domain/useCases/cart";
 import { CartsRepository, ProductsRepository } from "@infra/database/postgres";
 

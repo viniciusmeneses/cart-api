@@ -1,6 +1,6 @@
 import { plainToInstance } from "class-transformer";
 
-import { ICreateCartUseCase } from "@domain/ports/useCases/cart/ICreateCartUseCase";
+import { ICreateCartUseCase } from "@domain/ports/useCases/cart";
 import faker from "@faker-js/faker";
 
 import { validateSut } from "../../helpers";

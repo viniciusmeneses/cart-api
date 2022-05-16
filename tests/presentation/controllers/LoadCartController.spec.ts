@@ -1,9 +1,9 @@
 import { LoadCartUseCase } from "@domain/useCases/cart";
-import { CartNotExistsError } from "@domain/useCases/errors/CartNotExists";
+import { CartNotExistsError } from "@domain/useCases/errors";
 import { FieldValidationError, ValidationErrors } from "@domain/validator";
 import faker from "@faker-js/faker";
 import { CartsRepository } from "@infra/database/postgres";
-import { LoadCartController } from "@presentation/controllers/cart/LoadCartController";
+import { LoadCartController } from "@presentation/controllers/cart";
 import { HttpResponse } from "@presentation/helpers";
 import { makeFakeCart } from "@tests/domain/fakes";
 

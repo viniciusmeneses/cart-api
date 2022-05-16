@@ -1,7 +1,7 @@
 import { inject, singleton } from "tsyringe";
 
-import { ILoadCartUseCase } from "@domain/ports/useCases/cart/ILoadCartUseCase";
-import { CartNotExistsError } from "@domain/useCases/errors/CartNotExists";
+import { ILoadCartUseCase } from "@domain/ports/useCases/cart";
+import { CartNotExistsError } from "@domain/useCases/errors";
 import { ValidationErrors } from "@domain/validator";
 import { HttpResponse } from "@presentation/helpers";
 import { Http, IController } from "@presentation/protocols";

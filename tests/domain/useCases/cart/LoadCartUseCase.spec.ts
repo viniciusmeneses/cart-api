@@ -1,6 +1,6 @@
-import { ICartsRepository } from "@domain/ports/repositories/ICartsRepository";
+import { ICartsRepository } from "@domain/ports/repositories";
 import { LoadCartUseCase } from "@domain/useCases/cart";
-import { CartNotExistsError } from "@domain/useCases/errors/CartNotExists";
+import { CartNotExistsError } from "@domain/useCases/errors";
 import { ValidationErrors } from "@domain/validator";
 import faker from "@faker-js/faker";
 import { CartsRepository } from "@infra/database/postgres";

@@ -1,7 +1,6 @@
 import { prop } from "rambda";
 
-import { IProductsRepository } from "@domain/ports/repositories";
-import { ICartsRepository, ICreateCartInput } from "@domain/ports/repositories/ICartsRepository";
+import { ICartsRepository, ICreateCartInput, IProductsRepository } from "@domain/ports/repositories";
 import { CreateCartUseCase } from "@domain/useCases/cart";
 import { ProductNotExistsError, ProductStockUnavailable } from "@domain/useCases/errors";
 import { ValidationErrors } from "@domain/validator";

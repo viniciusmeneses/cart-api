@@ -1,11 +1,11 @@
 import { inject, singleton } from "tsyringe";
 
 import { Cart } from "@domain/entities/Cart";
-import { ICartsRepository } from "@domain/ports/repositories/ICartsRepository";
-import { ILoadCartUseCase } from "@domain/ports/useCases/cart/ILoadCartUseCase";
+import { ICartsRepository } from "@domain/ports/repositories";
+import { ILoadCartUseCase } from "@domain/ports/useCases/cart";
 import { ValidateInputs } from "@domain/validator";
 
-import { CartNotExistsError } from "../errors/CartNotExists";
+import { CartNotExistsError } from "../errors";
 
 @singleton()
 export class LoadCartUseCase implements ILoadCartUseCase {

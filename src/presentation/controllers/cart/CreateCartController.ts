@@ -1,6 +1,6 @@
 import { inject, singleton } from "tsyringe";
 
-import { ICreateCartUseCase } from "@domain/ports/useCases/cart/ICreateCartUseCase";
+import { ICreateCartUseCase } from "@domain/ports/useCases/cart";
 import { ProductNotExistsError, ProductStockUnavailable } from "@domain/useCases/errors";
 import { ValidationErrors } from "@domain/validator";
 import { HttpResponse } from "@presentation/helpers";

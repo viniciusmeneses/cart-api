@@ -2,7 +2,7 @@ import { singleton } from "tsyringe";
 import { Repository as OrmRepository } from "typeorm";
 
 import { Cart } from "@domain/entities/Cart";
-import { ICartsRepository, ICreateCartInput } from "@domain/ports/repositories/ICartsRepository";
+import { ICartsRepository, ICreateCartInput } from "@domain/ports/repositories";
 
 import { Repository } from "../Repository";
 

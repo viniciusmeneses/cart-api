@@ -2,9 +2,8 @@ import { indexBy, prop } from "rambda";
 import { inject, singleton } from "tsyringe";
 
 import { Cart } from "@domain/entities/Cart";
-import { IProductsRepository } from "@domain/ports/repositories";
-import { ICartsRepository } from "@domain/ports/repositories/ICartsRepository";
-import { ICreateCartUseCase } from "@domain/ports/useCases/cart/ICreateCartUseCase";
+import { ICartsRepository, IProductsRepository } from "@domain/ports/repositories";
+import { ICreateCartUseCase } from "@domain/ports/useCases/cart";
 import { ValidateInputs } from "@domain/validator";
 
 import { ProductNotExistsError, ProductStockUnavailable } from "../errors";

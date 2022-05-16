@@ -2,8 +2,7 @@ import { plainToInstance } from "class-transformer";
 import { validateOrReject, ValidationError as ClassValidationError } from "class-validator";
 import { flatten, values } from "rambda";
 
-import { FieldValidationError } from "./errors/FieldValidationError";
-import { ValidationErrors } from "./errors";
+import { FieldValidationError, ValidationErrors } from "./errors";
 
 const addPropertyToPath = (path, property) => {
   const isIndexProperty = !isNaN(parseInt(property, 10));
