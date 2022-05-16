@@ -16,6 +16,11 @@ const serializeErrors = (errors: Errors) => {
 };
 
 export namespace HttpResponse {
+  export const ok = (data: any): Http.IResponse => ({
+    status: 200,
+    body: data,
+  });
+
   export const created = (data: any): Http.IResponse => ({
     status: 201,
     body: data,
