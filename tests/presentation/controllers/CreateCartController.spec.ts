@@ -20,6 +20,7 @@ interface ISutTypes {
 const fakeCart = makeFakeCart({ id: faker.datatype.uuid(), items: [] });
 const fakeRequest: CreateCartController.IRequest = {
   body: { items: fakeCart.items },
+  url: { params: null, query: null },
 };
 
 const makeCreateCartUseCaseMock = () => {
@@ -50,7 +51,7 @@ describe("CreateCartController", () => {
 
   it("Should return not found if CreateCartUseCase.execute throws ProductNotExistsError", async () => {
     const { sut, createCartUseCaseMock } = makeSut();
-    const fakeError = new ProductNotExistsError(fakeCart.id);
+    const fakeError = new ProductNotExistsError(faker.datatype.uuid());
 
     jest.spyOn(createCartUseCaseMock, "execute").mockRejectedValueOnce(fakeError);
     const response = await sut.handle(fakeRequest);
