@@ -9,7 +9,8 @@ import { Repository } from "../Repository";
 export class CartsRepository extends Repository implements ICartsRepository {
   public async create(dto?: ICreateCartInput): Promise<Cart> {
     const repository = this.connection.getRepository(Cart);
-    const cart = repository.create(dto);
-    return repository.save(cart);
+    const cart = repository.create({ items: dto?.items ?? [] });
+    await repository.save(cart);
+    return repository.findOne({ where: { id: cart.id }, relations: { items: { product: true } } });
   }
 }
