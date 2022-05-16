@@ -1,5 +1,5 @@
 import { singleton } from "tsyringe";
-import { In } from "typeorm";
+import { In, Repository as OrmRepository } from "typeorm";
 
 import { Product } from "@domain/entities/Product";
 import { IProductsRepository } from "@domain/ports/repositories";
@@ -9,12 +9,14 @@ import { Repository } from "../Repository";
 @singleton()
 export class ProductsRepository extends Repository implements IProductsRepository {
   public findById(id: string): Promise<Product> {
-    const repository = this.connection.getRepository(Product);
-    return repository.findOneBy({ id });
+    return this.repository.findOneBy({ id });
   }
 
   public findByIds(ids: string[]): Promise<Product[]> {
-    const repository = this.connection.getRepository(Product);
-    return repository.findBy({ id: In(ids) });
+    return this.repository.findBy({ id: In(ids) });
+  }
+
+  private get repository(): OrmRepository<Product> {
+    return this.connection.getRepository(Product);
   }
 }

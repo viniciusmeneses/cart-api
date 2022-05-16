@@ -11,4 +11,5 @@ export interface ICreateCartInput {
 
 export interface ICartsRepository {
   create(dto?: ICreateCartInput): Promise<Cart>;
+  findById(id: string): Promise<Cart>;
 }
