@@ -23,8 +23,8 @@ export class CreateCartController implements IController {
 
   private handleError(error: Error): Http.IResponse {
     if (error instanceof ValidationErrors) return HttpResponse.badRequest(error.errors);
-    if (error instanceof ProductNotExistsError) return HttpResponse.badRequest(error);
     if (error instanceof ProductStockUnavailable) return HttpResponse.badRequest(error);
+    if (error instanceof ProductNotExistsError) return HttpResponse.notFound(error);
     throw error;
   }
 }

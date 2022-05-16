@@ -27,14 +27,14 @@ describe("HttpResponse", () => {
 
     it("Should return array of errors as body", async () => {
       const sut = makeSut();
-      const response = sut.badRequest([new FieldValidationError("field", "error")]);
-      expect(response.body).toEqual({ errors: [{ type: "FieldValidationError", field: "field", message: "error" }] });
-    });
 
-    it("Should return array of errors as body if input is a single error", async () => {
-      const sut = makeSut();
-      const response = sut.badRequest(new Error("error"));
-      expect(response.body).toEqual({ errors: [{ type: "Error", message: "error" }] });
+      const validationResponse = sut.badRequest([new FieldValidationError("field", "error")]);
+      expect(validationResponse.body).toEqual({
+        errors: [{ type: "FieldValidationError", field: "field", message: "error" }],
+      });
+
+      const errorResponse = sut.badRequest(new Error("error"));
+      expect(errorResponse.body).toEqual({ errors: [{ type: "Error", message: "error" }] });
     });
   });
 });

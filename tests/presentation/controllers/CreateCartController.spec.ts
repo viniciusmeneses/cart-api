@@ -48,14 +48,14 @@ describe("CreateCartController", () => {
     expect(useCaseSpy).toHaveBeenCalledWith(fakeRequest.body);
   });
 
-  it("Should return bad request if CreateCartUseCase.execute throws ProductNotExistsError", async () => {
+  it("Should return not found if CreateCartUseCase.execute throws ProductNotExistsError", async () => {
     const { sut, createCartUseCaseMock } = makeSut();
     const fakeError = new ProductNotExistsError(fakeCart.id);
 
     jest.spyOn(createCartUseCaseMock, "execute").mockRejectedValueOnce(fakeError);
     const response = await sut.handle(fakeRequest);
 
-    expect(response).toEqual(HttpResponse.badRequest(fakeError));
+    expect(response).toEqual(HttpResponse.notFound(fakeError));
   });
 
   it("Should return bad request if CreateCartUseCase.execute throws ProductStockUnavailable", async () => {
