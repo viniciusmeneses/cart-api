@@ -20,7 +20,7 @@ export class CartItem {
   public product: Product;
 
   @Column({ type: "integer" })
-  public amount: number;
+  public quantity: number;
 
   @CreateDateColumn({ name: "created_at" })
   public createdAt: Date;

@@ -10,7 +10,7 @@ describe("ICreateCartUseCase.Input", () => {
 
   describe("items", () => {
     it("Should throw if product id is not an uuid", async () => {
-      const sut = makeSut({ items: [{ productId: null, amount: 1 }] });
+      const sut = makeSut({ items: [{ productId: null, quantity: 1 }] });
 
       await expect(validateSut(sut)).rejects.toMatchObject([
         { property: "items", children: [{ property: "0", children: [{ property: "productId" }] }] },
@@ -21,25 +21,25 @@ describe("ICreateCartUseCase.Input", () => {
       const fakeProductId = faker.datatype.uuid();
       const sut = makeSut({
         items: [
-          { productId: fakeProductId, amount: 1 },
-          { productId: fakeProductId, amount: 1 },
+          { productId: fakeProductId, quantity: 1 },
+          { productId: fakeProductId, quantity: 1 },
         ],
       });
 
       await expect(validateSut(sut)).rejects.toMatchObject([{ property: "items", children: [] }]);
     });
 
-    it("Should throw if amount is not positive", async () => {
-      const sut = makeSut({ items: [{ productId: faker.datatype.uuid(), amount: 0 }] });
+    it("Should throw if quantity is not positive", async () => {
+      const sut = makeSut({ items: [{ productId: faker.datatype.uuid(), quantity: 0 }] });
 
       await expect(validateSut(sut)).rejects.toMatchObject([
-        { property: "items", children: [{ property: "0", children: [{ property: "amount" }] }] },
+        { property: "items", children: [{ property: "0", children: [{ property: "quantity" }] }] },
       ]);
     });
   });
 
   it("Should not throw if input is valid", async () => {
-    const fakeItem = { amount: faker.datatype.number({ min: 0 }), productId: faker.datatype.uuid() };
+    const fakeItem = { quantity: faker.datatype.number({ min: 0 }), productId: faker.datatype.uuid() };
 
     const sut = makeSut({
       items: [fakeItem],

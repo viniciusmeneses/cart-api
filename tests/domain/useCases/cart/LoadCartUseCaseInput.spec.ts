@@ -16,7 +16,7 @@ describe("ILoadCartUseCase.Input", () => {
   });
 
   it("Should not throw if input is valid", async () => {
-    const fakeItem = { amount: faker.datatype.number({ min: 0 }), productId: faker.datatype.uuid() };
+    const fakeItem = { quantity: faker.datatype.number({ min: 0 }), productId: faker.datatype.uuid() };
 
     const sut = makeSut({
       items: [fakeItem],

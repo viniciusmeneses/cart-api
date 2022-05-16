@@ -2,7 +2,7 @@ import { Cart } from "@domain/entities/Cart";
 
 export interface ICreateCartItemInput {
   productId: string;
-  amount: number;
+  quantity: number;
 }
 
 export interface ICreateCartInput {

@@ -32,7 +32,7 @@ export class CreateCartController implements IController {
 export namespace CreateCartController {
   interface IRequestItem {
     productId: string;
-    amount: number;
+    quantity: number;
   }
 
   interface IRequestBody {

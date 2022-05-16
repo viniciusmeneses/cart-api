@@ -54,7 +54,7 @@ const makeSut = (): ISutTypes => {
 describe("CreateCartUseCase", () => {
   it("Should throw ValidationErrors if any param is invalid", async () => {
     const { sut } = makeSut();
-    const promise = sut.execute({ items: [{ productId: null, amount: null }] });
+    const promise = sut.execute({ items: [{ productId: null, quantity: null }] });
     await expect(promise).rejects.toThrowError(ValidationErrors);
   });
 

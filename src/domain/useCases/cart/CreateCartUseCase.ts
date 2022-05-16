@@ -22,10 +22,10 @@ export class CreateCartUseCase implements ICreateCartUseCase {
       const products = await this.productsRepository.findByIds(items.map(prop("productId")));
       const productsById = indexBy(prop("id"), products);
 
-      for (const { productId, amount } of items) {
+      for (const { productId, quantity } of items) {
         const product = productsById[productId];
         if (product == null) throw new ProductNotExistsError(productId);
-        if (product.stock < amount) throw new ProductStockUnavailable(product);
+        if (product.stock < quantity) throw new ProductStockUnavailable(product);
       }
     }
 

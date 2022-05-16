@@ -4,7 +4,7 @@ import faker from "@faker-js/faker";
 export const makeFakeCartItem = ({ cartId, productId }: { cartId: string; productId: string }): CartItem => ({
   cartId,
   productId,
-  amount: faker.datatype.number({ min: 1, max: 10 }),
+  quantity: faker.datatype.number({ min: 1, max: 10 }),
   createdAt: new Date(),
   updatedAt: new Date(),
   cart: null,

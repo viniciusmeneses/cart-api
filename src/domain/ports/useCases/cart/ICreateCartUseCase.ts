@@ -14,7 +14,7 @@ export namespace ICreateCartUseCase {
 
     @IsInt()
     @IsPositive()
-    public amount: number;
+    public quantity: number;
   }
 
   export class Input {
