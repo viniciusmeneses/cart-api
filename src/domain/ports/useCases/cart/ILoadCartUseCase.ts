@@ -1,4 +1,4 @@
-import { IsUUID } from "class-validator";
+import { IsNotEmpty, IsUUID } from "class-validator";
 
 import { Cart } from "@domain/entities/Cart";
 
@@ -8,6 +8,7 @@ export interface ILoadCartUseCase {
 
 export namespace ILoadCartUseCase {
   export class Input {
+    @IsNotEmpty()
     @IsUUID()
     public id: string;
   }

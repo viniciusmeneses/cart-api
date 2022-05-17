@@ -1,5 +1,5 @@
 import { Type } from "class-transformer";
-import { ArrayUnique, IsInt, IsOptional, IsPositive, IsUUID, ValidateNested } from "class-validator";
+import { ArrayUnique, IsInt, IsNotEmpty, IsOptional, IsPositive, IsUUID, ValidateNested } from "class-validator";
 
 import { Cart } from "@domain/entities/Cart";
 
@@ -9,6 +9,7 @@ export interface ICreateCartUseCase {
 
 export namespace ICreateCartUseCase {
   class CartItemInput {
+    @IsNotEmpty()
     @IsUUID()
     public productId: string;
 
