@@ -67,17 +67,17 @@ describe("RemoveCartItemsUseCase", () => {
     await expect(sut.execute({ cartId: fakeCart.id })).rejects.toThrow();
   });
 
-  it("Should call CartItemsRepository.removeByCartId with cart id", async () => {
+  it("Should call CartItemsRepository.remove with cart id", async () => {
     const { sut, cartItemsRepositoryMock } = makeSut();
     await sut.execute({ cartId: fakeCart.id });
 
-    expect(cartItemsRepositoryMock.removeByCartId).toBeCalledTimes(1);
-    expect(cartItemsRepositoryMock.removeByCartId).toBeCalledWith(fakeCart.id);
+    expect(cartItemsRepositoryMock.remove).toBeCalledTimes(1);
+    expect(cartItemsRepositoryMock.remove).toBeCalledWith(fakeCart.items);
   });
 
-  it("Should throw if CartItemsRepository.removeByCartId throws", async () => {
+  it("Should throw if CartItemsRepository.remove throws", async () => {
     const { sut, cartItemsRepositoryMock } = makeSut();
-    cartItemsRepositoryMock.removeByCartId.mockRejectedValueOnce(new Error());
+    cartItemsRepositoryMock.remove.mockRejectedValueOnce(new Error());
     await expect(sut.execute({ cartId: fakeCart.id })).rejects.toThrow();
   });
 });

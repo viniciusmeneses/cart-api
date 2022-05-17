@@ -78,15 +78,15 @@ describe("CartsRepository", () => {
 
     it("Should return a cart on success", async () => {
       const sut = makeSut();
-      const createdCart = await sut.findById(fakeCart.id);
-      expect(createdCart).toEqual(fakeCart);
+      const foundCart = await sut.findById(fakeCart.id);
+      expect(foundCart).toEqual(fakeCart);
     });
 
     it("Should not return a cart if id not exists", async () => {
       const sut = makeSut();
       cartsRepositoryMock.findOne.mockResolvedValueOnce(null);
-      const noneProduct = await sut.findById(fakeCart.id);
-      expect(noneProduct).toBeFalsy();
+      const noneCart = await sut.findById(fakeCart.id);
+      expect(noneCart).toBeFalsy();
     });
   });
 });
