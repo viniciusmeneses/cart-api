@@ -15,7 +15,7 @@ export class CartsRepository extends Repository implements ICartsRepository {
   }
 
   public async findById(id: string): Promise<Cart> {
-    return this.repository.findOne({ where: { id }, relations: { items: { product: true } } });
+    return this.repository.findOneBy({ id });
   }
 
   private get repository(): OrmRepository<Cart> {

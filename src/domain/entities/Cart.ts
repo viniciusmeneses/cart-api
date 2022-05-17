@@ -7,7 +7,7 @@ export class Cart {
   @PrimaryGeneratedColumn("uuid")
   public id: string;
 
-  @OneToMany(() => CartItem, (item) => item.cart, { cascade: true })
+  @OneToMany(() => CartItem, (item) => item.cart, { cascade: true, eager: true })
   public items: CartItem[];
 
   @CreateDateColumn({ name: "created_at" })

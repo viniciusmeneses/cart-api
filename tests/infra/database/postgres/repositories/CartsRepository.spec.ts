@@ -8,7 +8,7 @@ const fakeCart = makeFakeCart({ id: faker.datatype.uuid(), items: [] });
 PostgresConnection.prototype.getRepository = jest.fn().mockReturnValue({
   create: jest.fn().mockReturnValue(fakeCart),
   save: jest.fn().mockReturnValue(fakeCart),
-  findOne: jest.fn().mockReturnValue(fakeCart),
+  findOneBy: jest.fn().mockReturnValue(fakeCart),
 });
 
 const connectionMock = new PostgresConnection();
@@ -64,15 +64,15 @@ describe("CartsRepository", () => {
   });
 
   describe("findById", () => {
-    it("Should call Repository.findOne", async () => {
+    it("Should call Repository.findOneBy", async () => {
       const sut = makeSut();
       await sut.findById(fakeCart.id);
-      expect(cartsRepositoryMock.findOne).toHaveBeenCalledTimes(1);
+      expect(cartsRepositoryMock.findOneBy).toHaveBeenCalledTimes(1);
     });
 
-    it("Should throw if Repository.findOne throws", async () => {
+    it("Should throw if Repository.findOneBy throws", async () => {
       const sut = makeSut();
-      jest.spyOn(cartsRepositoryMock, "findOne").mockRejectedValueOnce(new Error());
+      jest.spyOn(cartsRepositoryMock, "findOneBy").mockRejectedValueOnce(new Error());
       await expect(sut.findById(fakeCart.id)).rejects.toThrow();
     });
 
@@ -84,7 +84,7 @@ describe("CartsRepository", () => {
 
     it("Should not return a cart if id not exists", async () => {
       const sut = makeSut();
-      cartsRepositoryMock.findOne.mockResolvedValueOnce(null);
+      cartsRepositoryMock.findOneBy.mockResolvedValueOnce(null);
       const noneCart = await sut.findById(fakeCart.id);
       expect(noneCart).toBeFalsy();
     });
