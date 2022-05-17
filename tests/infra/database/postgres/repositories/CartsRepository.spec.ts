@@ -3,7 +3,7 @@ import faker from "@faker-js/faker";
 import { CartsRepository, PostgresConnection } from "@infra/database/postgres";
 import { makeFakeCart, makeFakeCartItem } from "@tests/domain/fakes";
 
-const fakeCart = makeFakeCart({ id: faker.datatype.uuid(), items: [] });
+const fakeCart = makeFakeCart({ id: faker.datatype.uuid() });
 
 PostgresConnection.prototype.getRepository = jest.fn().mockReturnValue({
   create: jest.fn().mockReturnValue(fakeCart),
@@ -51,10 +51,10 @@ describe("CartsRepository", () => {
 
     it("Should return a new cart with items on success", async () => {
       const sut = makeSut();
-      const fakeCartWithItems = {
-        ...fakeCart,
+      const fakeCartWithItems = makeFakeCart({
+        id: fakeCart.id,
         items: [makeFakeCartItem({ cartId: fakeCart.id, productId: faker.datatype.uuid() })],
-      };
+      });
 
       jest.spyOn(sut, "findById").mockResolvedValueOnce(fakeCartWithItems);
       const createdCart = await sut.create({ items: fakeCartWithItems.items });

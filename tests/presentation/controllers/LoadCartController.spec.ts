@@ -17,7 +17,7 @@ interface ISutTypes {
   loadCartUseCaseMock: MockedLoadCartUseCase;
 }
 
-const fakeCart = makeFakeCart({ id: faker.datatype.uuid(), items: [] });
+const fakeCart = makeFakeCart({ id: faker.datatype.uuid() });
 const fakeRequest: LoadCartController.IRequest = {
   url: { params: { id: fakeCart.id }, query: null },
   body: null,
