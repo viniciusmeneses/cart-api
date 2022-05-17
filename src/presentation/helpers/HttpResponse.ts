@@ -1,3 +1,5 @@
+import { instanceToPlain } from "class-transformer";
+
 import { FieldValidationError } from "@domain/validator";
 import { Http } from "@presentation/protocols";
 
@@ -18,12 +20,12 @@ const serializeErrors = (errors: Errors) => {
 export namespace HttpResponse {
   export const ok = (data: any): Http.IResponse => ({
     status: 200,
-    body: data,
+    body: instanceToPlain(data),
   });
 
   export const created = (data: any): Http.IResponse => ({
     status: 201,
-    body: data,
+    body: instanceToPlain(data),
   });
 
   export const noContent = (): Http.IResponse => ({ status: 204 });

@@ -1,3 +1,4 @@
+import { Exclude, Expose } from "class-transformer";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryColumn, UpdateDateColumn } from "typeorm";
 
 import { Cart } from "./Cart";
@@ -22,9 +23,16 @@ export class CartItem {
   @Column({ type: "integer" })
   public quantity: number;
 
+  @Exclude()
   @CreateDateColumn({ name: "created_at" })
   public createdAt: Date;
 
+  @Exclude()
   @UpdateDateColumn({ name: "updated_at" })
   public updatedAt: Date;
+
+  @Expose()
+  public get total(): number {
+    return this.product.price * this.quantity;
+  }
 }
