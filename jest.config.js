@@ -7,6 +7,7 @@ module.exports = {
     "!src/**/index.ts",
     "!src/main/**/*.ts",
     "!src/infra/database/postgres/{migrations,config}/*.ts",
+    "!src/infra/database/postgres/dataSource.ts",
   ],
   coverageReporters: ["lcov", "text"],
   testMatch: ["**/*.spec.ts"],
