@@ -2,9 +2,7 @@ import { Router } from "express";
 import { container } from "tsyringe";
 
 import { adaptExpressRoute } from "@main/helpers";
-import { CreateCartController } from "@presentation/controllers/cart";
-import { LoadCartController } from "@presentation/controllers/cart/LoadCartController";
-import { RemoveCartItemsController } from "@presentation/controllers/cart/RemoveCartItemsController";
+import { CreateCartController, LoadCartController, RemoveCartItemsController } from "@presentation/controllers/cart";
 
 const cartRoutes = Router();
 
