@@ -26,6 +26,8 @@ export namespace HttpResponse {
     body: data,
   });
 
+  export const noContent = (): Http.IResponse => ({ status: 204 });
+
   export const badRequest = (errors: Errors): Http.IResponse => ({
     status: 400,
     body: serializeErrors(errors),
