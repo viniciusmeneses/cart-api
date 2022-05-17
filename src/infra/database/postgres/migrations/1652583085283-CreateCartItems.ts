@@ -17,7 +17,7 @@ export class CreateCartItems1652583085283 implements MigrationInterface {
             isPrimary: true,
           },
           {
-            name: "amount",
+            name: "quantity",
             type: "integer",
             isNullable: false,
           },

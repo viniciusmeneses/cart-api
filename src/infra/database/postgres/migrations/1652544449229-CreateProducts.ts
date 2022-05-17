@@ -23,6 +23,11 @@ export class CreateProducts1652544449229 implements MigrationInterface {
             isNullable: false,
           },
           {
+            name: "price",
+            type: "numeric(8, 2)",
+            isNullable: false,
+          },
+          {
             name: "created_at",
             type: "timestamp",
             default: "now()",
