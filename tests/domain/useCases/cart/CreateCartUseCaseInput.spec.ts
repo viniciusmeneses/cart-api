@@ -6,7 +6,7 @@ import faker from "@faker-js/faker";
 import { validateSut } from "../../helpers";
 
 describe("ICreateCartUseCase.Input", () => {
-  const makeSut = (data: object) => plainToInstance(ICreateCartUseCase.Input, data);
+  const makeSut = (data: ICreateCartUseCase.Input) => plainToInstance(ICreateCartUseCase.Input, data);
 
   describe("items", () => {
     it("Should throw if product id is not an uuid", async () => {

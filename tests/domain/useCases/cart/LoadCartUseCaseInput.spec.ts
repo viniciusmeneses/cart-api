@@ -6,7 +6,7 @@ import faker from "@faker-js/faker";
 import { validateSut } from "../../helpers";
 
 describe("ILoadCartUseCase.Input", () => {
-  const makeSut = (data: object) => plainToInstance(ILoadCartUseCase.Input, data);
+  const makeSut = (data: ILoadCartUseCase.Input) => plainToInstance(ILoadCartUseCase.Input, data);
 
   describe("id", () => {
     it("Should throw if id is not an uuid", async () => {
@@ -16,11 +16,7 @@ describe("ILoadCartUseCase.Input", () => {
   });
 
   it("Should not throw if input is valid", async () => {
-    const fakeItem = { quantity: faker.datatype.number({ min: 0 }), productId: faker.datatype.uuid() };
-
-    const sut = makeSut({
-      items: [fakeItem],
-    });
+    const sut = makeSut({ id: faker.datatype.uuid() });
     await expect(validateSut(sut)).resolves.toBeUndefined();
   });
 });
