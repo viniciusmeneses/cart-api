@@ -32,6 +32,14 @@ describe("HttpResponse", () => {
     });
   });
 
+  describe("noContent", () => {
+    it("Should return status code 204", async () => {
+      const sut = makeSut();
+      const response = sut.noContent();
+      expect(response.status).toBe(204);
+    });
+  });
+
   describe("badRequest", () => {
     it("Should return status code 400", async () => {
       const sut = makeSut();
