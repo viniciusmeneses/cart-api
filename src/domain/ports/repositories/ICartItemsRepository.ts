@@ -1,3 +1,14 @@
+import { CartItem } from "@domain/entities/CartItem";
+
+export interface ICreateCartItemInput {
+  cartId: string;
+  productId: string;
+  quantity: number;
+}
+
 export interface ICartItemsRepository {
-  removeByCartId(cartId: string): Promise<void>;
+  create(dto: ICreateCartItemInput): Promise<CartItem>;
+  findById(cartId: string, productId: string): Promise<CartItem>;
+  update(cartItem: CartItem): Promise<CartItem>;
+  remove(cartItems: CartItem[]): Promise<void>;
 }

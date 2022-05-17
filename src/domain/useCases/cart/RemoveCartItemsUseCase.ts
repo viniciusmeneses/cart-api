@@ -17,6 +17,6 @@ export class RemoveCartItemsUseCase implements IRemoveCartItemsUseCase {
   public async execute({ cartId }: IRemoveCartItemsUseCase.Input): Promise<void> {
     const cart = await this.cartsRepository.findById(cartId);
     if (cart == null) throw new CartNotExistsError(cartId);
-    await this.cartItemsRepository.removeByCartId(cartId);
+    await this.cartItemsRepository.remove(cart.items);
   }
 }

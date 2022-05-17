@@ -1,12 +1,9 @@
 import { Cart } from "@domain/entities/Cart";
 
-export interface ICreateCartItemInput {
-  productId: string;
-  quantity: number;
-}
+import { ICreateCartItemInput } from "./ICartItemsRepository";
 
 export interface ICreateCartInput {
-  items?: ICreateCartItemInput[];
+  items?: Omit<ICreateCartItemInput, "cartId">[];
 }
 
 export interface ICartsRepository {
