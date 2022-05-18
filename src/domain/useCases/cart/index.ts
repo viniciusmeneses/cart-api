@@ -1,3 +1,4 @@
+export * from "./AddCouponToCartUseCase";
 export * from "./CreateCartItemUseCase";
 export * from "./CreateCartUseCase";
 export * from "./LoadCartUseCase";
