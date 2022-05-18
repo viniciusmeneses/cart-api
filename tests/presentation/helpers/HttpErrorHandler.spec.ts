@@ -2,6 +2,7 @@ import {
   CartItemAlreadyExistsError,
   CartItemNotExistsError,
   CartNotExistsError,
+  CouponCodeInvalidError,
   ProductNotExistsError,
   ProductStockUnavailableError,
 } from "@domain/useCases/errors";
@@ -49,6 +50,13 @@ describe("HttpErrorHandler", () => {
       const fakeError = new CartItemNotExistsError(faker.datatype.uuid(), faker.datatype.uuid());
       const response = sut.handleCartError(fakeError);
       expect(response).toEqual(HttpResponse.notFound(fakeError));
+    });
+
+    it("Should return bad request if error is CouponCodeInvalidError", () => {
+      const sut = makeSut();
+      const fakeError = new CouponCodeInvalidError(faker.random.alphaNumeric());
+      const response = sut.handleCartError(fakeError);
+      expect(response).toEqual(HttpResponse.badRequest(fakeError));
     });
 
     it("Should return bad request if error is ValidationErrors", () => {
