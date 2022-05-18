@@ -7,7 +7,9 @@ import { CreateCartController, LoadCartController, RemoveCartItemsController } f
 const cartRoutes = Router();
 
 cartRoutes.post("/", adaptExpressRoute(container.resolve(CreateCartController)));
-cartRoutes.get("/:id", adaptExpressRoute(container.resolve(LoadCartController)));
-cartRoutes.delete("/:id/items", adaptExpressRoute(container.resolve(RemoveCartItemsController)));
+cartRoutes.get("/:cartId", adaptExpressRoute(container.resolve(LoadCartController)));
+
+cartRoutes.delete("/:cartId/items", adaptExpressRoute(container.resolve(RemoveCartItemsController)));
+cartRoutes.delete("/:cartId/items/:productId", adaptExpressRoute(container.resolve(RemoveCartItemsController)));
 
 export { cartRoutes };

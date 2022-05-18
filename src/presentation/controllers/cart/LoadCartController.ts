@@ -11,10 +11,10 @@ export class LoadCartController implements IController {
   public constructor(@inject("LoadCartUseCase") private loadCartUseCase: ILoadCartUseCase) {}
 
   public async handle(request: LoadCartController.IRequest): Promise<Http.IResponse> {
-    const { id } = request.url.params;
+    const { cartId } = request.url.params;
 
     try {
-      const cart = await this.loadCartUseCase.execute({ id });
+      const cart = await this.loadCartUseCase.execute({ id: cartId });
       return HttpResponse.ok(cart);
     } catch (error) {
       return this.handleError(error);
@@ -29,5 +29,5 @@ export class LoadCartController implements IController {
 }
 
 export namespace LoadCartController {
-  export type IRequest = Http.IRequest<unknown, { id: string }>;
+  export type IRequest = Http.IRequest<unknown, { cartId: string }>;
 }

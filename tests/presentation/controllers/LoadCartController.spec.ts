@@ -19,7 +19,7 @@ interface ISutTypes {
 
 const fakeCart = makeFakeCart({ id: faker.datatype.uuid() });
 const fakeRequest: LoadCartController.IRequest = {
-  url: { params: { id: fakeCart.id }, query: null },
+  url: { params: { cartId: fakeCart.id }, query: null },
   body: null,
 };
 
@@ -43,7 +43,7 @@ describe("LoadCartController", () => {
     await sut.handle(fakeRequest);
 
     expect(useCaseSpy).toHaveBeenCalledTimes(1);
-    expect(useCaseSpy).toHaveBeenCalledWith(fakeRequest.url.params);
+    expect(useCaseSpy).toHaveBeenCalledWith({ id: fakeRequest.url.params.cartId });
   });
 
   it("Should return not found if LoadCartUseCase.execute throws CartNotExistsError", async () => {
