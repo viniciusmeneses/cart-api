@@ -1,8 +1,8 @@
 import { propEq } from "rambda";
 
-import { ICartItemsRepository, ICartsRepository, IProductsRepository } from "@domain/ports/repositories";
+import { ICartItemsRepository, ICartsRepository } from "@domain/ports/repositories";
 import { RemoveCartItemsUseCase } from "@domain/useCases/cart";
-import { CartNotExistsError, ProductNotExistsError } from "@domain/useCases/errors";
+import { CartNotExistsError } from "@domain/useCases/errors";
 import { ValidationErrors } from "@domain/validator";
 import faker from "@faker-js/faker";
 import { CartItemsRepository, CartsRepository, ProductsRepository } from "@infra/database/postgres";
@@ -13,13 +13,11 @@ jest.mock("@infra/database/postgres");
 
 type MockedICartItemsRepository = jest.Mocked<ICartItemsRepository>;
 type MockedICartsRepository = jest.Mocked<ICartsRepository>;
-type MockedIProductsRepository = jest.Mocked<IProductsRepository>;
 
 interface ISutTypes {
   sut: RemoveCartItemsUseCase;
   cartItemsRepositoryMock: MockedICartItemsRepository;
   cartsRepositoryMock: MockedICartsRepository;
-  productsRepositoryMock: MockedIProductsRepository;
 }
 
 const fakeCartId = faker.datatype.uuid();
@@ -38,19 +36,11 @@ const makeCartsRepositoryMock = () => {
 
 const makeCartItemsRepositoryMock = () => jest.mocked(new CartItemsRepository());
 
-const makeProductsRepositoryMock = () => {
-  const productsRepositoryMock = jest.mocked(new ProductsRepository());
-  productsRepositoryMock.findById.mockResolvedValue(fakeCart.items[0].product);
-  return productsRepositoryMock;
-};
-
 const makeSut = (): ISutTypes => {
   const cartsRepositoryMock = makeCartsRepositoryMock();
   const cartItemsRepositoryMock = makeCartItemsRepositoryMock();
-  const productsRepositoryMock = makeProductsRepositoryMock();
-
-  const sut = new RemoveCartItemsUseCase(cartItemsRepositoryMock, cartsRepositoryMock, productsRepositoryMock);
-  return { sut, cartsRepositoryMock, cartItemsRepositoryMock, productsRepositoryMock };
+  const sut = new RemoveCartItemsUseCase(cartItemsRepositoryMock, cartsRepositoryMock);
+  return { sut, cartsRepositoryMock, cartItemsRepositoryMock };
 };
 
 describe("RemoveCartItemsUseCase", () => {
@@ -78,28 +68,6 @@ describe("RemoveCartItemsUseCase", () => {
     const { sut, cartsRepositoryMock } = makeSut();
     cartsRepositoryMock.findById.mockRejectedValueOnce(new Error());
     await expect(sut.execute({ cartId: fakeCartId })).rejects.toThrow();
-  });
-
-  it("Should call ProductsRepository.findById with productId", async () => {
-    const { sut, productsRepositoryMock } = makeSut();
-    await sut.execute({ cartId: fakeCartId, productId: fakeProductId });
-
-    expect(productsRepositoryMock.findById).toBeCalledTimes(1);
-    expect(productsRepositoryMock.findById).toBeCalledWith(fakeProductId);
-  });
-
-  it("Should throw ProductNotExistsError if cartId does not exists", async () => {
-    const { sut, productsRepositoryMock } = makeSut();
-    productsRepositoryMock.findById.mockResolvedValue(null);
-    await expect(sut.execute({ cartId: fakeCartId, productId: fakeProductId })).rejects.toThrowError(
-      ProductNotExistsError
-    );
-  });
-
-  it("Should throw if ProductsRepository.findById throws", async () => {
-    const { sut, productsRepositoryMock } = makeSut();
-    productsRepositoryMock.findById.mockRejectedValueOnce(new Error());
-    await expect(sut.execute({ cartId: fakeCartId, productId: fakeProductId })).rejects.toThrow();
   });
 
   it("Should call CartItemsRepository.remove with cart items", async () => {

@@ -28,11 +28,7 @@ const fakeRequest: RemoveCartItemsController.IRequest = {
 };
 
 const makeRemoveCartItemsUseCaseMock = () =>
-  new RemoveCartItemsUseCase(
-    new CartItemsRepository(),
-    new CartsRepository(),
-    new ProductsRepository()
-  ) as MockedRemoveCartItemsUseCase;
+  new RemoveCartItemsUseCase(new CartItemsRepository(), new CartsRepository()) as MockedRemoveCartItemsUseCase;
 
 const makeSut = (): ISutTypes => {
   const removeCartItemsUseCaseMock = makeRemoveCartItemsUseCaseMock();
@@ -54,16 +50,6 @@ describe("RemoveCartItemsController", () => {
   it("Should return not found if RemoveCartItemsUseCase.execute throws CartNotExistsError", async () => {
     const { sut, removeCartItemsUseCaseMock } = makeSut();
     const fakeError = new CartNotExistsError(fakeCart.id);
-
-    jest.spyOn(removeCartItemsUseCaseMock, "execute").mockRejectedValueOnce(fakeError);
-    const response = await sut.handle(fakeRequest);
-
-    expect(response).toEqual(HttpResponse.notFound(fakeError));
-  });
-
-  it("Should return not found if RemoveCartItemsUseCase.execute throws ProductNotExistsError", async () => {
-    const { sut, removeCartItemsUseCaseMock } = makeSut();
-    const fakeError = new ProductNotExistsError(fakeProduct.id);
 
     jest.spyOn(removeCartItemsUseCaseMock, "execute").mockRejectedValueOnce(fakeError);
     const response = await sut.handle(fakeRequest);
