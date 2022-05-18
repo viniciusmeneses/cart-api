@@ -68,13 +68,44 @@ describe("ValidateInputs Decorator", () => {
     expect(validateOrReject).toHaveBeenCalledWith(Object.assign(new UseCaseStubInput(), fakeInput), expect.anything());
   });
 
-  it("Should throw ValidationError if ClassValidator.validateOrReject throws", async () => {
+  it("Should throw ValidationErrors if ClassValidator.validateOrReject throws", async () => {
     const sut = makeSut();
 
     jest.mocked(validateOrReject).mockRejectedValueOnce([{ property: "data", constraints: { data: "error" } }]);
     const promise = sut.execute(fakeInput);
 
     await expect(promise).rejects.toThrowError(new ValidationErrors([new FieldValidationError("data", "error")]));
+  });
+
+  it("Should throw ValidationErrors with correct nested field name", async () => {
+    const sut = makeSut();
+
+    jest
+      .mocked(validateOrReject)
+      .mockRejectedValueOnce([
+        { property: "first", children: [{ property: "second", constraints: { data: "error" } }] },
+      ]);
+    const promise = sut.execute(fakeInput);
+
+    await expect(promise).rejects.toThrowError(
+      new ValidationErrors([new FieldValidationError("first[0].second", "error")])
+    );
+  });
+
+  it("Should throw ValidationErrors with multiple field errors", async () => {
+    const sut = makeSut();
+
+    jest
+      .mocked(validateOrReject)
+      .mockRejectedValueOnce([{ property: "property", constraints: { data: "error", dataTwo: "errorTwo" } }]);
+    const promise = sut.execute(fakeInput);
+
+    await expect(promise).rejects.toThrowError(
+      new ValidationErrors([
+        new FieldValidationError("property", "error"),
+        new FieldValidationError("property", "errorTwo"),
+      ])
+    );
   });
 
   it("Should not validate inputs that aren't a class", async () => {
