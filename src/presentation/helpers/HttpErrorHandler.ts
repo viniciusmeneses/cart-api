@@ -2,6 +2,7 @@ import {
   CartItemAlreadyExistsError,
   CartItemNotExistsError,
   CartNotExistsError,
+  CouponCodeInvalidError,
   ProductNotExistsError,
   ProductStockUnavailableError,
 } from "@domain/useCases/errors";
@@ -15,6 +16,7 @@ export namespace HttpErrorHandler {
     if (error instanceof ValidationErrors) return HttpResponse.badRequest(error.errors);
     if (error instanceof CartItemAlreadyExistsError) return HttpResponse.badRequest(error);
     if (error instanceof ProductStockUnavailableError) return HttpResponse.badRequest(error);
+    if (error instanceof CouponCodeInvalidError) return HttpResponse.badRequest(error);
 
     if (error instanceof CartNotExistsError) return HttpResponse.notFound(error);
     if (error instanceof CartItemNotExistsError) return HttpResponse.notFound(error);
