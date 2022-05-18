@@ -7,8 +7,8 @@ import { ICreateCartItemUseCase } from "@domain/ports/useCases/cart";
 import { ValidateInputs } from "@domain/validator";
 
 import {
+  CartItemAlreadyExistsError,
   CartNotExistsError,
-  ProductAlreadyAddedToCartError,
   ProductNotExistsError,
   ProductStockUnavailable,
 } from "../errors";
@@ -25,7 +25,9 @@ export class CreateCartItemUseCase implements ICreateCartItemUseCase {
   public async execute({ cartId, productId, quantity }: ICreateCartItemUseCase.Input): Promise<CartItem> {
     const cart = await this.cartsRepository.findById(cartId);
     if (cart == null) throw new CartNotExistsError(cartId);
-    if (cart.items.some(propEq("productId", productId))) throw new ProductAlreadyAddedToCartError(productId, cartId);
+
+    const cartItem = cart.items.find(propEq("productId", productId));
+    if (cartItem != null) throw new CartItemAlreadyExistsError(cartItem);
 
     const product = await this.productsRepository.findById(productId);
     if (product == null) throw new ProductNotExistsError(productId);

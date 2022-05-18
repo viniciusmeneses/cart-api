@@ -8,8 +8,8 @@ import {
 } from "@domain/ports/repositories";
 import { CreateCartItemUseCase } from "@domain/useCases/cart";
 import {
+  CartItemAlreadyExistsError,
   CartNotExistsError,
-  ProductAlreadyAddedToCartError,
   ProductNotExistsError,
   ProductStockUnavailable,
 } from "@domain/useCases/errors";
@@ -95,10 +95,10 @@ describe("CreateCartItemUseCase", () => {
     await expect(sut.execute(fakeCreateCartItemInput)).rejects.toThrowError(CartNotExistsError);
   });
 
-  it("Should throw ProductAlreadyAddedToCartError if product already was added to cart", async () => {
+  it("Should throw CartItemAlreadyExistsError if product already was added to cart", async () => {
     const { sut, cartsRepositoryMock } = makeSut();
     cartsRepositoryMock.findById.mockResolvedValueOnce(makeFakeCart({ id: fakeCart.id, items: [fakeCartItem] }));
-    await expect(sut.execute(fakeCreateCartItemInput)).rejects.toThrowError(ProductAlreadyAddedToCartError);
+    await expect(sut.execute(fakeCreateCartItemInput)).rejects.toThrowError(CartItemAlreadyExistsError);
   });
 
   it("Should call ProductsRepository.findById with productId", async () => {
