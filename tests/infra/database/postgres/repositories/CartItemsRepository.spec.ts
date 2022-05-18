@@ -1,14 +1,14 @@
 import { CartItem } from "@domain/entities/CartItem";
 import faker from "@faker-js/faker";
 import { CartItemsRepository, PostgresConnection } from "@infra/database/postgres";
-import { makeFakeCart, makeFakeCartItem } from "@tests/domain/fakes";
+import { makeFakeCartItem } from "@tests/domain/fakes";
 
 const fakeCartItem = makeFakeCartItem({ cartId: faker.datatype.uuid(), productId: faker.datatype.uuid() });
 
 PostgresConnection.prototype.getRepository = jest.fn().mockReturnValue({
   create: jest.fn().mockReturnValue(fakeCartItem),
   save: jest.fn().mockReturnValue(fakeCartItem),
-  findOneBy: jest.fn().mockResolvedValue(fakeCartItem),
+  findOne: jest.fn().mockResolvedValue(fakeCartItem),
   remove: jest.fn(),
 });
 
@@ -52,15 +52,15 @@ describe("CartItemsRepository", () => {
   });
 
   describe("findById", () => {
-    it("Should call Repository.findOneBy", async () => {
+    it("Should call Repository.findOne", async () => {
       const sut = makeSut();
       await sut.findById(fakeCartItem.cartId, fakeCartItem.productId);
-      expect(cartItemsRepositoryMock.findOneBy).toHaveBeenCalledTimes(1);
+      expect(cartItemsRepositoryMock.findOne).toHaveBeenCalledTimes(1);
     });
 
-    it("Should throw if Repository.findOneBy throws", async () => {
+    it("Should throw if Repository.findOne throws", async () => {
       const sut = makeSut();
-      jest.spyOn(cartItemsRepositoryMock, "findOneBy").mockRejectedValueOnce(new Error());
+      jest.spyOn(cartItemsRepositoryMock, "findOne").mockRejectedValueOnce(new Error());
       await expect(sut.findById(fakeCartItem.cartId, fakeCartItem.productId)).rejects.toThrow();
     });
 
@@ -72,7 +72,7 @@ describe("CartItemsRepository", () => {
 
     it("Should not return a cart item if id not exists", async () => {
       const sut = makeSut();
-      cartItemsRepositoryMock.findOneBy.mockResolvedValueOnce(null);
+      cartItemsRepositoryMock.findOne.mockResolvedValueOnce(null);
       const noneCartItem = await sut.findById(fakeCartItem.cartId, fakeCartItem.productId);
       expect(noneCartItem).toBeFalsy();
     });

@@ -8,7 +8,7 @@ export class Cart {
   @PrimaryGeneratedColumn("uuid")
   public id: string;
 
-  @OneToMany(() => CartItem, (item) => item.cart, { cascade: true, eager: true })
+  @OneToMany(() => CartItem, (item) => item.cart, { cascade: true })
   public items: CartItem[];
 
   @Exclude()

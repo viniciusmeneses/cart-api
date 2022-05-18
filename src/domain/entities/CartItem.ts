@@ -16,7 +16,7 @@ export class CartItem {
   @JoinColumn({ name: "cart_id" })
   public cart: Cart;
 
-  @ManyToOne(() => Product, { onDelete: "CASCADE", eager: true })
+  @ManyToOne(() => Product, { onDelete: "CASCADE" })
   @JoinColumn({ name: "product_id" })
   public product: Product;
 
