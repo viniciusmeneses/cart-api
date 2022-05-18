@@ -15,7 +15,10 @@ export class CartItemsRepository extends Repository implements ICartItemsReposit
   }
 
   public async findById(cartId: string, productId: string): Promise<CartItem> {
-    return this.repository.findOne({ where: { cartId, productId }, relations: { product: true } });
+    return this.repository.findOne({
+      where: { cartId, productId },
+      relations: { product: true },
+    });
   }
 
   public async update(cartItem: CartItem): Promise<CartItem> {
