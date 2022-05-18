@@ -8,10 +8,22 @@ import { validateSut } from "../../helpers";
 describe("IRemoveCartItemsUseCase.Input", () => {
   const makeSut = (data: IRemoveCartItemsUseCase.Input) => plainToInstance(IRemoveCartItemsUseCase.Input, data);
 
-  describe("id", () => {
-    it("Should throw if cart id is not an uuid", async () => {
+  describe("cartId", () => {
+    it("Should throw if cartId is not an uuid", async () => {
       const sut = makeSut({ cartId: "" });
       await expect(validateSut(sut)).rejects.toMatchObject([{ property: "cartId" }]);
+    });
+  });
+
+  describe("productId", () => {
+    it("Should throw if productId is not an uuid", async () => {
+      const sut = makeSut({ cartId: faker.datatype.uuid(), productId: "" });
+      await expect(validateSut(sut)).rejects.toMatchObject([{ property: "productId" }]);
+    });
+
+    it("Should not throw if productId is missing", async () => {
+      const sut = makeSut({ cartId: faker.datatype.uuid() });
+      await expect(validateSut(sut)).resolves.toBeUndefined();
     });
   });
 
