@@ -9,15 +9,7 @@ describe("ICreateCartUseCase.Input", () => {
   const makeSut = (data: ICreateCartUseCase.Input) => plainToInstance(ICreateCartUseCase.Input, data);
 
   describe("items", () => {
-    it("Should throw if product id is not an uuid", async () => {
-      const sut = makeSut({ items: [{ productId: null, quantity: 1 }] });
-
-      await expect(validateSut(sut)).rejects.toMatchObject([
-        { property: "items", children: [{ property: "0", children: [{ property: "productId" }] }] },
-      ]);
-    });
-
-    it("Should throw if product id is not unique", async () => {
+    it("Should throw if productId is not unique", async () => {
       const fakeProductId = faker.datatype.uuid();
       const sut = makeSut({
         items: [
@@ -29,12 +21,22 @@ describe("ICreateCartUseCase.Input", () => {
       await expect(validateSut(sut)).rejects.toMatchObject([{ property: "items", children: [] }]);
     });
 
-    it("Should throw if quantity is not positive", async () => {
-      const sut = makeSut({ items: [{ productId: faker.datatype.uuid(), quantity: 0 }] });
+    describe("productId", () => {
+      it("Should throw if productId is not an uuid", async () => {
+        const sut = makeSut({ items: [{ productId: "", quantity: 1 }] });
+        await expect(validateSut(sut)).rejects.toMatchObject([
+          { property: "items", children: [{ property: "0", children: [{ property: "productId" }] }] },
+        ]);
+      });
+    });
 
-      await expect(validateSut(sut)).rejects.toMatchObject([
-        { property: "items", children: [{ property: "0", children: [{ property: "quantity" }] }] },
-      ]);
+    describe("quantity", () => {
+      it("Should throw if quantity is not positive", async () => {
+        const sut = makeSut({ items: [{ productId: faker.datatype.uuid(), quantity: 0 }] });
+        await expect(validateSut(sut)).rejects.toMatchObject([
+          { property: "items", children: [{ property: "0", children: [{ property: "quantity" }] }] },
+        ]);
+      });
     });
   });
 

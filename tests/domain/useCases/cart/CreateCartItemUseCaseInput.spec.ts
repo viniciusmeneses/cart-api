@@ -8,18 +8,6 @@ import { validateSut } from "../../helpers";
 describe("ICreateCartItemUseCase.Input", () => {
   const makeSut = (data: ICreateCartItemUseCase.Input) => plainToInstance(ICreateCartItemUseCase.Input, data);
 
-  describe("productId", () => {
-    it("Should throw if productId is not an uuid", async () => {
-      const sut = makeSut({
-        quantity: faker.datatype.number({ min: 1 }),
-        cartId: faker.datatype.uuid(),
-        productId: "",
-      });
-
-      await expect(validateSut(sut)).rejects.toMatchObject([{ property: "productId" }]);
-    });
-  });
-
   describe("cartId", () => {
     it("Should throw if cartId is not an uuid", async () => {
       const sut = makeSut({
@@ -32,6 +20,17 @@ describe("ICreateCartItemUseCase.Input", () => {
     });
   });
 
+  describe("productId", () => {
+    it("Should throw if productId is not an uuid", async () => {
+      const sut = makeSut({
+        quantity: faker.datatype.number({ min: 1 }),
+        cartId: faker.datatype.uuid(),
+        productId: "",
+      });
+      await expect(validateSut(sut)).rejects.toMatchObject([{ property: "productId" }]);
+    });
+  });
+
   describe("quantity", () => {
     it("Should throw if quantity is not positive", async () => {
       const sut = makeSut({
@@ -39,7 +38,6 @@ describe("ICreateCartItemUseCase.Input", () => {
         productId: faker.datatype.uuid(),
         cartId: faker.datatype.uuid(),
       });
-
       await expect(validateSut(sut)).rejects.toMatchObject([{ property: "quantity" }]);
     });
   });

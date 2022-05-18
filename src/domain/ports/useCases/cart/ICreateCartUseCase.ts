@@ -8,7 +8,7 @@ export interface ICreateCartUseCase {
 }
 
 export namespace ICreateCartUseCase {
-  class CartItemInput {
+  export class CartItemInput {
     @IsNotEmpty()
     @IsUUID()
     public productId: string;
