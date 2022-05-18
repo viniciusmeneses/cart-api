@@ -21,6 +21,11 @@ export class CartsRepository extends Repository implements ICartsRepository {
     });
   }
 
+  public async update(cart: Cart): Promise<Cart> {
+    const { id } = await this.repository.save(cart);
+    return this.findById(id);
+  }
+
   private get repository(): OrmRepository<Cart> {
     return this.connection.getRepository(Cart);
   }
