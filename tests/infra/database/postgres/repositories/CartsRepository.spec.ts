@@ -89,4 +89,31 @@ describe("CartsRepository", () => {
       expect(noneCart).toBeFalsy();
     });
   });
+
+  describe("update", () => {
+    it("Should call Repository.save", async () => {
+      const sut = makeSut();
+      await sut.update(fakeCart);
+      expect(cartsRepositoryMock.save).toHaveBeenCalledTimes(1);
+    });
+
+    it("Should call findById", async () => {
+      const sut = makeSut();
+      const findByIdSpy = jest.spyOn(sut, "findById");
+      await sut.update(fakeCart);
+      expect(findByIdSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it("Should throw if Repository.save throws", async () => {
+      const sut = makeSut();
+      jest.spyOn(cartsRepositoryMock, "save").mockRejectedValueOnce(new Error());
+      await expect(sut.update(fakeCart)).rejects.toThrow();
+    });
+
+    it("Should return updated cart item on success", async () => {
+      const sut = makeSut();
+      const foundCartItem = await sut.update(fakeCart);
+      expect(foundCartItem).toEqual(fakeCart);
+    });
+  });
 });
