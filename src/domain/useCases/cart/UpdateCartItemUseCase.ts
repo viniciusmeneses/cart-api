@@ -5,7 +5,7 @@ import { ICartItemsRepository } from "@domain/ports/repositories";
 import { IUpdateCartItemUseCase } from "@domain/ports/useCases/cart";
 import { ValidateInputs } from "@domain/validator";
 
-import { CartItemNotExistsError, ProductStockUnavailable } from "../errors";
+import { CartItemNotExistsError, ProductStockUnavailableError } from "../errors";
 
 @singleton()
 export class UpdateCartItemUseCase implements IUpdateCartItemUseCase {
@@ -16,7 +16,7 @@ export class UpdateCartItemUseCase implements IUpdateCartItemUseCase {
     const cartItem = await this.cartItemsRepository.findById(cartId, productId);
 
     if (cartItem == null) throw new CartItemNotExistsError(cartId, productId);
-    if (quantity > cartItem.product.stock) throw new ProductStockUnavailable(cartItem.product);
+    if (quantity > cartItem.product.stock) throw new ProductStockUnavailableError(cartItem.product);
 
     cartItem.quantity = quantity;
     return this.cartItemsRepository.update(cartItem);

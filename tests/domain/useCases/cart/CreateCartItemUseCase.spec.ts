@@ -11,7 +11,7 @@ import {
   CartItemAlreadyExistsError,
   CartNotExistsError,
   ProductNotExistsError,
-  ProductStockUnavailable,
+  ProductStockUnavailableError,
 } from "@domain/useCases/errors";
 import { ValidationErrors } from "@domain/validator";
 import faker from "@faker-js/faker";
@@ -121,10 +121,10 @@ describe("CreateCartItemUseCase", () => {
     await expect(sut.execute(fakeCreateCartItemInput)).rejects.toThrowError(ProductNotExistsError);
   });
 
-  it("Should throw ProductStockUnavailable if quantity is bigger than product stock", async () => {
+  it("Should throw ProductStockUnavailableError if quantity is bigger than product stock", async () => {
     const { sut, productsRepositoryMock } = makeSut();
     productsRepositoryMock.findById.mockResolvedValue({ ...fakeProduct, stock: fakeCreateCartItemInput.quantity - 1 });
-    await expect(sut.execute(fakeCreateCartItemInput)).rejects.toThrowError(ProductStockUnavailable);
+    await expect(sut.execute(fakeCreateCartItemInput)).rejects.toThrowError(ProductStockUnavailableError);
   });
 
   it("Should call CartItemsRepository.create with dto", async () => {

@@ -2,7 +2,7 @@ import { prop } from "rambda";
 
 import { ICartsRepository, ICreateCartInput, IProductsRepository } from "@domain/ports/repositories";
 import { CreateCartUseCase } from "@domain/useCases/cart";
-import { ProductNotExistsError, ProductStockUnavailable } from "@domain/useCases/errors";
+import { ProductNotExistsError, ProductStockUnavailableError } from "@domain/useCases/errors";
 import { ValidationErrors } from "@domain/validator";
 import faker from "@faker-js/faker";
 import { CartsRepository, ProductsRepository } from "@infra/database/postgres";
@@ -77,10 +77,10 @@ describe("CreateCartUseCase", () => {
     await expect(sut.execute(fakeCreateCartInput)).rejects.toThrowError(ProductNotExistsError);
   });
 
-  it("Should throw ProductStockUnavailable if any product has no stock available", async () => {
+  it("Should throw ProductStockUnavailableError if any product has no stock available", async () => {
     const { sut, productsRepositoryMock } = makeSut();
     productsRepositoryMock.findByIds.mockResolvedValue([{ ...fakeProduct, stock: 0 }]);
-    await expect(sut.execute(fakeCreateCartInput)).rejects.toThrowError(ProductStockUnavailable);
+    await expect(sut.execute(fakeCreateCartInput)).rejects.toThrowError(ProductStockUnavailableError);
   });
 
   it("Should call CartsRepository.create with dto", async () => {

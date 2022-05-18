@@ -1,6 +1,6 @@
 export class ProductNotExistsError extends Error {
-  public constructor(id: string) {
-    super(`Product ${id} not exists`);
+  public constructor(public productId: string) {
+    super(`Product ${productId} does not exist`);
     this.name = "ProductNotExistsError";
   }
 }

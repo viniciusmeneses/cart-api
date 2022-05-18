@@ -5,7 +5,7 @@ import { CartItem } from "@domain/entities/CartItem";
 import { ICartItemsRepository } from "@domain/ports/repositories";
 import { IUpdateCartItemUseCase } from "@domain/ports/useCases/cart";
 import { UpdateCartItemUseCase } from "@domain/useCases/cart";
-import { CartItemNotExistsError, ProductStockUnavailable } from "@domain/useCases/errors";
+import { CartItemNotExistsError, ProductStockUnavailableError } from "@domain/useCases/errors";
 import { ValidationErrors } from "@domain/validator";
 import faker from "@faker-js/faker";
 import { CartItemsRepository } from "@infra/database/postgres";
@@ -70,7 +70,7 @@ describe("UpdateCartItemUseCase", () => {
     await expect(sut.execute(fakeUpdateCartItemInput)).rejects.toThrowError(CartItemNotExistsError);
   });
 
-  it("Should throw ProductStockUnavailable if quantity is bigger than product stock", async () => {
+  it("Should throw ProductStockUnavailableError if quantity is bigger than product stock", async () => {
     const { sut, cartItemsRepositoryMock } = makeSut();
     cartItemsRepositoryMock.findById.mockResolvedValueOnce(
       plainToClass(CartItem, {
@@ -78,7 +78,7 @@ describe("UpdateCartItemUseCase", () => {
         product: { ...fakeCartItem.product, stock: fakeUpdateCartItemInput.quantity - 1 },
       })
     );
-    await expect(sut.execute(fakeUpdateCartItemInput)).rejects.toThrowError(ProductStockUnavailable);
+    await expect(sut.execute(fakeUpdateCartItemInput)).rejects.toThrowError(ProductStockUnavailableError);
   });
 
   it("Should call CartItemsRepository.update with cart item", async () => {

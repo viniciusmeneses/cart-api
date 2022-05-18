@@ -5,7 +5,7 @@ import {
   CartItemAlreadyExistsError,
   CartNotExistsError,
   ProductNotExistsError,
-  ProductStockUnavailable,
+  ProductStockUnavailableError,
 } from "@domain/useCases/errors";
 import { ValidationErrors } from "@domain/validator";
 import { HttpResponse } from "@presentation/helpers";
@@ -31,7 +31,7 @@ export class CreateCartItemController implements IController {
     if (error instanceof ValidationErrors) return HttpResponse.badRequest(error.errors);
     if (error instanceof CartNotExistsError) return HttpResponse.notFound(error);
     if (error instanceof ProductNotExistsError) return HttpResponse.notFound(error);
-    if (error instanceof ProductStockUnavailable) return HttpResponse.badRequest(error);
+    if (error instanceof ProductStockUnavailableError) return HttpResponse.badRequest(error);
     if (error instanceof CartItemAlreadyExistsError) return HttpResponse.badRequest(error);
     throw error;
   }

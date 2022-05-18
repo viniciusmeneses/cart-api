@@ -10,7 +10,7 @@ import {
   CartItemAlreadyExistsError,
   CartNotExistsError,
   ProductNotExistsError,
-  ProductStockUnavailable,
+  ProductStockUnavailableError,
 } from "../errors";
 
 @singleton()
@@ -31,7 +31,7 @@ export class CreateCartItemUseCase implements ICreateCartItemUseCase {
 
     const product = await this.productsRepository.findById(productId);
     if (product == null) throw new ProductNotExistsError(productId);
-    if (quantity > product.stock) throw new ProductStockUnavailable(product);
+    if (quantity > product.stock) throw new ProductStockUnavailableError(product);
 
     return this.cartItemsRepository.create({ cartId, productId, quantity });
   }

@@ -3,7 +3,7 @@ import {
   CartItemAlreadyExistsError,
   CartNotExistsError,
   ProductNotExistsError,
-  ProductStockUnavailable,
+  ProductStockUnavailableError,
 } from "@domain/useCases/errors";
 import { FieldValidationError, ValidationErrors } from "@domain/validator";
 import faker from "@faker-js/faker";
@@ -75,9 +75,9 @@ describe("CreateCartItemController", () => {
     expect(response).toEqual(HttpResponse.notFound(fakeError));
   });
 
-  it("Should return bad request if CreateCartItemUseCase.execute throws ProductStockUnavailable", async () => {
+  it("Should return bad request if CreateCartItemUseCase.execute throws ProductStockUnavailableError", async () => {
     const { sut, createCartItemUseCaseMock } = makeSut();
-    const fakeError = new ProductStockUnavailable(fakeCartItem.product);
+    const fakeError = new ProductStockUnavailableError(fakeCartItem.product);
 
     jest.spyOn(createCartItemUseCaseMock, "execute").mockRejectedValueOnce(fakeError);
     const response = await sut.handle(fakeRequest);

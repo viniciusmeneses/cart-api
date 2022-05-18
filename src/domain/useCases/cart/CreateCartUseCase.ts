@@ -6,7 +6,7 @@ import { ICartsRepository, IProductsRepository } from "@domain/ports/repositorie
 import { ICreateCartUseCase } from "@domain/ports/useCases/cart";
 import { ValidateInputs } from "@domain/validator";
 
-import { ProductNotExistsError, ProductStockUnavailable } from "../errors";
+import { ProductNotExistsError, ProductStockUnavailableError } from "../errors";
 
 @singleton()
 export class CreateCartUseCase implements ICreateCartUseCase {
@@ -24,7 +24,7 @@ export class CreateCartUseCase implements ICreateCartUseCase {
       for (const { productId, quantity } of items) {
         const product = productsById[productId];
         if (product == null) throw new ProductNotExistsError(productId);
-        if (product.stock < quantity) throw new ProductStockUnavailable(product);
+        if (product.stock < quantity) throw new ProductStockUnavailableError(product);
       }
     }
 

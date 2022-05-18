@@ -1,6 +1,6 @@
 export class CartNotExistsError extends Error {
-  public constructor(id: string) {
-    super(`Cart ${id} not exists`);
+  public constructor(public cartId: string) {
+    super(`Cart ${cartId} does not exist`);
     this.name = "CartNotExistsError";
   }
 }

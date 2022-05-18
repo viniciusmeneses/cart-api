@@ -1,8 +1,8 @@
 import { Product } from "@domain/entities/Product";
 
-export class ProductStockUnavailable extends Error {
-  public constructor(product: Product) {
-    super(`Product ${product.id} hasn't stock available`);
-    this.name = "ProductStockUnavailable";
+export class ProductStockUnavailableError extends Error {
+  public constructor(public product: Product) {
+    super(`Product ${product.id} does not have enough stock`);
+    this.name = "ProductStockUnavailableError";
   }
 }
