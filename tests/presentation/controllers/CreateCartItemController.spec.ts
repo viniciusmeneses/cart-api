@@ -1,19 +1,16 @@
+import { F } from "rambda";
+
 import { CreateCartItemUseCase } from "@domain/useCases/cart";
-import {
-  CartItemAlreadyExistsError,
-  CartNotExistsError,
-  ProductNotExistsError,
-  ProductStockUnavailableError,
-} from "@domain/useCases/errors";
-import { FieldValidationError, ValidationErrors } from "@domain/validator";
 import faker from "@faker-js/faker";
 import { CartItemsRepository, CartsRepository, ProductsRepository } from "@infra/database/postgres";
 import { CreateCartItemController } from "@presentation/controllers/cart";
-import { HttpResponse } from "@presentation/helpers";
+import { HttpErrorHandler, HttpResponse } from "@presentation/helpers";
 import { makeFakeCartItem } from "@tests/domain/fakes";
 
 jest.mock("@domain/useCases/cart");
 jest.mock("@infra/database/postgres");
+
+jest.spyOn(HttpErrorHandler, "handleCartError");
 
 type MockedCreateCartItemUseCase = jest.Mocked<CreateCartItemUseCase>;
 
@@ -55,61 +52,15 @@ describe("CreateCartItemController", () => {
     expect(useCaseSpy).toHaveBeenCalledWith({ ...fakeRequest.body, ...fakeRequest.url.params });
   });
 
-  it("Should return not found if CreateCartItemUseCase.execute throws CartNotExistsError", async () => {
+  it("Should call HttpErrorHandler.handleCartError if use case throws", async () => {
     const { sut, createCartItemUseCaseMock } = makeSut();
-    const fakeError = new CartNotExistsError(faker.datatype.uuid());
+    const fakeError = new Error();
 
     jest.spyOn(createCartItemUseCaseMock, "execute").mockRejectedValueOnce(fakeError);
-    const response = await sut.handle(fakeRequest);
+    await sut.handle(fakeRequest).catch(F);
 
-    expect(response).toEqual(HttpResponse.notFound(fakeError));
-  });
-
-  it("Should return not found if CreateCartItemUseCase.execute throws ProductNotExistsError", async () => {
-    const { sut, createCartItemUseCaseMock } = makeSut();
-    const fakeError = new ProductNotExistsError(faker.datatype.uuid());
-
-    jest.spyOn(createCartItemUseCaseMock, "execute").mockRejectedValueOnce(fakeError);
-    const response = await sut.handle(fakeRequest);
-
-    expect(response).toEqual(HttpResponse.notFound(fakeError));
-  });
-
-  it("Should return bad request if CreateCartItemUseCase.execute throws ProductStockUnavailableError", async () => {
-    const { sut, createCartItemUseCaseMock } = makeSut();
-    const fakeError = new ProductStockUnavailableError(fakeCartItem.product);
-
-    jest.spyOn(createCartItemUseCaseMock, "execute").mockRejectedValueOnce(fakeError);
-    const response = await sut.handle(fakeRequest);
-
-    expect(response).toEqual(HttpResponse.badRequest(fakeError));
-  });
-
-  it("Should return bad request if CreateCartItemUseCase.execute throws CartItemAlreadyExistsError", async () => {
-    const { sut, createCartItemUseCaseMock } = makeSut();
-    const fakeError = new CartItemAlreadyExistsError(fakeCartItem);
-
-    jest.spyOn(createCartItemUseCaseMock, "execute").mockRejectedValueOnce(fakeError);
-    const response = await sut.handle(fakeRequest);
-
-    expect(response).toEqual(HttpResponse.badRequest(fakeError));
-  });
-
-  it("Should return bad request if CreateCartItemUseCase.execute throws ValidationErrors", async () => {
-    const { sut, createCartItemUseCaseMock } = makeSut();
-    const validationErrors = new ValidationErrors([new FieldValidationError("anyField", "anyError")]);
-
-    jest.spyOn(createCartItemUseCaseMock, "execute").mockRejectedValueOnce(validationErrors);
-    const response = await sut.handle(fakeRequest);
-
-    expect(response).toEqual(HttpResponse.badRequest(validationErrors.errors));
-  });
-
-  it("Should throw if CreateCartItemUseCase.execute throws uncaught error", async () => {
-    const { sut, createCartItemUseCaseMock } = makeSut();
-    const error = new Error();
-    jest.spyOn(createCartItemUseCaseMock, "execute").mockRejectedValueOnce(error);
-    await expect(sut.handle(fakeRequest)).rejects.toThrowError(error);
+    expect(HttpErrorHandler.handleCartError).toHaveBeenCalledTimes(1);
+    expect(HttpErrorHandler.handleCartError).toHaveBeenCalledWith(fakeError);
   });
 
   it("Should return created cart item on success", async () => {

@@ -1,14 +1,16 @@
+import { F } from "rambda";
+
 import { LoadCartUseCase } from "@domain/useCases/cart";
-import { CartNotExistsError } from "@domain/useCases/errors";
-import { FieldValidationError, ValidationErrors } from "@domain/validator";
 import faker from "@faker-js/faker";
 import { CartsRepository } from "@infra/database/postgres";
 import { LoadCartController } from "@presentation/controllers/cart";
-import { HttpResponse } from "@presentation/helpers";
+import { HttpErrorHandler, HttpResponse } from "@presentation/helpers";
 import { makeFakeCart } from "@tests/domain/fakes";
 
 jest.mock("@domain/useCases/cart");
 jest.mock("@infra/database/postgres");
+
+jest.spyOn(HttpErrorHandler, "handleCartError");
 
 type MockedLoadCartUseCase = jest.Mocked<LoadCartUseCase>;
 
@@ -46,31 +48,15 @@ describe("LoadCartController", () => {
     expect(useCaseSpy).toHaveBeenCalledWith({ id: fakeRequest.url.params.cartId });
   });
 
-  it("Should return not found if LoadCartUseCase.execute throws CartNotExistsError", async () => {
+  it("Should call HttpErrorHandler.handleCartError if use case throws", async () => {
     const { sut, loadCartUseCaseMock } = makeSut();
-    const fakeError = new CartNotExistsError(fakeCart.id);
+    const fakeError = new Error();
 
     jest.spyOn(loadCartUseCaseMock, "execute").mockRejectedValueOnce(fakeError);
-    const response = await sut.handle(fakeRequest);
+    await sut.handle(fakeRequest).catch(F);
 
-    expect(response).toEqual(HttpResponse.notFound(fakeError));
-  });
-
-  it("Should return bad request if LoadCartUseCase.execute throws ValidationErrors", async () => {
-    const { sut, loadCartUseCaseMock } = makeSut();
-    const validationErrors = new ValidationErrors([new FieldValidationError("anyField", "anyError")]);
-
-    jest.spyOn(loadCartUseCaseMock, "execute").mockRejectedValueOnce(validationErrors);
-    const response = await sut.handle(fakeRequest);
-
-    expect(response).toEqual(HttpResponse.badRequest(validationErrors.errors));
-  });
-
-  it("Should throw if LoadCartUseCase.execute throws uncaught error", async () => {
-    const { sut, loadCartUseCaseMock } = makeSut();
-    const error = new Error();
-    jest.spyOn(loadCartUseCaseMock, "execute").mockRejectedValueOnce(error);
-    await expect(sut.handle(fakeRequest)).rejects.toThrowError(error);
+    expect(HttpErrorHandler.handleCartError).toHaveBeenCalledTimes(1);
+    expect(HttpErrorHandler.handleCartError).toHaveBeenCalledWith(fakeError);
   });
 
   it("Should return cart on success", async () => {

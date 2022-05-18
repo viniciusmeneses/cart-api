@@ -1,9 +1,7 @@
 import { inject, singleton } from "tsyringe";
 
 import { IRemoveCartItemsUseCase } from "@domain/ports/useCases/cart";
-import { CartNotExistsError, ProductNotExistsError } from "@domain/useCases/errors";
-import { ValidationErrors } from "@domain/validator";
-import { HttpResponse } from "@presentation/helpers";
+import { HttpErrorHandler, HttpResponse } from "@presentation/helpers";
 import { Http, IController } from "@presentation/protocols";
 
 @singleton()
@@ -17,17 +15,16 @@ export class RemoveCartItemsController implements IController {
       await this.removeCartItemsUseCase.execute({ cartId, productId });
       return HttpResponse.noContent();
     } catch (error) {
-      return this.handleError(error);
+      return HttpErrorHandler.handleCartError(error);
     }
-  }
-
-  private handleError(error: Error): Http.IResponse {
-    if (error instanceof ValidationErrors) return HttpResponse.badRequest(error.errors);
-    if (error instanceof CartNotExistsError) return HttpResponse.notFound(error);
-    throw error;
   }
 }
 
 export namespace RemoveCartItemsController {
-  export type IRequest = Http.IRequest<unknown, { cartId: string; productId?: string }>;
+  interface IRequestParams {
+    cartId: string;
+    productId?: string;
+  }
+
+  export type IRequest = Http.IRequest<unknown, IRequestParams>;
 }

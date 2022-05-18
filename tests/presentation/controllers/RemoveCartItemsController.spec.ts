@@ -1,16 +1,16 @@
-import { mergeDeepRight } from "rambda";
+import { F } from "rambda";
 
 import { RemoveCartItemsUseCase } from "@domain/useCases/cart";
-import { CartNotExistsError, ProductNotExistsError } from "@domain/useCases/errors";
-import { FieldValidationError, ValidationErrors } from "@domain/validator";
 import faker from "@faker-js/faker";
 import { CartItemsRepository, CartsRepository, ProductsRepository } from "@infra/database/postgres";
 import { RemoveCartItemsController } from "@presentation/controllers/cart";
-import { HttpResponse } from "@presentation/helpers";
+import { HttpErrorHandler } from "@presentation/helpers";
 import { makeFakeCart, makeFakeProduct } from "@tests/domain/fakes";
 
 jest.mock("@domain/useCases/cart");
 jest.mock("@infra/database/postgres");
+
+jest.spyOn(HttpErrorHandler, "handleCartError");
 
 type MockedRemoveCartItemsUseCase = jest.Mocked<RemoveCartItemsUseCase>;
 
@@ -47,30 +47,14 @@ describe("RemoveCartItemsController", () => {
     expect(useCaseSpy).toHaveBeenCalledWith(fakeRequest.url.params);
   });
 
-  it("Should return not found if RemoveCartItemsUseCase.execute throws CartNotExistsError", async () => {
+  it("Should call HttpErrorHandler.handleCartError if use case throws", async () => {
     const { sut, removeCartItemsUseCaseMock } = makeSut();
-    const fakeError = new CartNotExistsError(fakeCart.id);
+    const fakeError = new Error();
 
     jest.spyOn(removeCartItemsUseCaseMock, "execute").mockRejectedValueOnce(fakeError);
-    const response = await sut.handle(fakeRequest);
+    await sut.handle(fakeRequest).catch(F);
 
-    expect(response).toEqual(HttpResponse.notFound(fakeError));
-  });
-
-  it("Should return bad request if RemoveCartItemsUseCase.execute throws ValidationErrors", async () => {
-    const { sut, removeCartItemsUseCaseMock } = makeSut();
-    const validationErrors = new ValidationErrors([new FieldValidationError("anyField", "anyError")]);
-
-    jest.spyOn(removeCartItemsUseCaseMock, "execute").mockRejectedValueOnce(validationErrors);
-    const response = await sut.handle(fakeRequest);
-
-    expect(response).toEqual(HttpResponse.badRequest(validationErrors.errors));
-  });
-
-  it("Should throw if RemoveCartItemsUseCase.execute throws uncaught error", async () => {
-    const { sut, removeCartItemsUseCaseMock } = makeSut();
-    const error = new Error();
-    jest.spyOn(removeCartItemsUseCaseMock, "execute").mockRejectedValueOnce(error);
-    await expect(sut.handle(fakeRequest)).rejects.toThrowError(error);
+    expect(HttpErrorHandler.handleCartError).toHaveBeenCalledTimes(1);
+    expect(HttpErrorHandler.handleCartError).toHaveBeenCalledWith(fakeError);
   });
 });

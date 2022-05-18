@@ -1,9 +1,7 @@
 import { inject, singleton } from "tsyringe";
 
 import { ILoadCartUseCase } from "@domain/ports/useCases/cart";
-import { CartNotExistsError } from "@domain/useCases/errors";
-import { ValidationErrors } from "@domain/validator";
-import { HttpResponse } from "@presentation/helpers";
+import { HttpErrorHandler, HttpResponse } from "@presentation/helpers";
 import { Http, IController } from "@presentation/protocols";
 
 @singleton()
@@ -17,17 +15,15 @@ export class LoadCartController implements IController {
       const cart = await this.loadCartUseCase.execute({ id: cartId });
       return HttpResponse.ok(cart);
     } catch (error) {
-      return this.handleError(error);
+      return HttpErrorHandler.handleCartError(error);
     }
-  }
-
-  private handleError(error: Error): Http.IResponse {
-    if (error instanceof ValidationErrors) return HttpResponse.badRequest(error.errors);
-    if (error instanceof CartNotExistsError) return HttpResponse.notFound(error);
-    throw error;
   }
 }
 
 export namespace LoadCartController {
-  export type IRequest = Http.IRequest<unknown, { cartId: string }>;
+  interface IRequestParams {
+    cartId: string;
+  }
+
+  export type IRequest = Http.IRequest<unknown, IRequestParams>;
 }
