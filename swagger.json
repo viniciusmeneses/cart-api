@@ -1,0 +1,920 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "API REST desenvolvida como desafio técnico da Loja Integrada que representa o funcionamento de um carrinho de compras. O projeto foi desenvolvido com a stack Typescript + Node.js + Express.js e aplicando os conceitos da Clean Architecture e os princípios SOLID.",
+    "version": "1.0.0",
+    "title": "Loja Integrada"
+  },
+  "basePath": "/api",
+  "tags": [
+    {
+      "name": "Carrinho"
+    },
+    {
+      "name": "Itens do carrinho"
+    }
+  ],
+  "paths": {
+    "/carts": {
+      "post": {
+        "tags": [
+          "Carrinho"
+        ],
+        "summary": "Inicializa um novo carrinho de compras vazio ou já com alguns itens",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Itens a serem incluídos no novo carrinho de compras",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "productId": {
+                        "type": "string",
+                        "format": "uuid",
+                        "default": "779d7f21-05b7-4a74-82e5-68b43c7d42d4"
+                      },
+                      "quantity": {
+                        "type": "number",
+                        "minimum": 1
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Carrinho de compras cadastrado",
+            "schema": {
+              "$ref": "#/definitions/Cart"
+            }
+          },
+          "400": {
+            "description": "Erros de validação",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string"
+                      },
+                      "message": {
+                        "type": "string"
+                      },
+                      "field": {
+                        "type": "string"
+                      }
+                    },
+                    "default": [
+                      {
+                        "type": "FieldValidationError",
+                        "message": "productId must be a UUID",
+                        "field": "items[0].productId"
+                      },
+                      {
+                        "type": "FieldValidationError",
+                        "message": "productId should not be empty",
+                        "field": "items[0].productId"
+                      },
+                      {
+                        "type": "FieldValidationError",
+                        "message": "quantity must be a positive number",
+                        "field": "items[0].quantity"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "400 ": {
+            "description": "Produto informado não possui estoque suficiente",
+            "schema": {
+              "$ref": "#/definitions/ProductStockUnavailableError"
+            }
+          },
+          "404 ": {
+            "description": "Produto informado não existe",
+            "schema": {
+              "$ref": "#/definitions/ProductNotExistsError"
+            }
+          }
+        }
+      }
+    },
+    "/carts/{cartId}": {
+      "get": {
+        "tags": [
+          "Carrinho"
+        ],
+        "summary": "Obtém carrinho de compras",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "cartId",
+            "in": "path",
+            "description": "ID do carrinho de compras",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Carrinho de compras",
+            "schema": {
+              "$ref": "#/definitions/Cart"
+            }
+          },
+          "400": {
+            "description": "Erros de validação",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string"
+                      },
+                      "message": {
+                        "type": "string"
+                      },
+                      "field": {
+                        "type": "string"
+                      }
+                    },
+                    "default": [
+                      {
+                        "type": "FieldValidationError",
+                        "message": "id must be a UUID",
+                        "field": "id"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "404 ": {
+            "description": "Carrinho de compras não existe",
+            "schema": {
+              "$ref": "#/definitions/CartNotExistsError"
+            }
+          }
+        }
+      }
+    },
+    "/carts/{cartId}/applyCoupon": {
+      "post": {
+        "tags": [
+          "Carrinho"
+        ],
+        "summary": "Adiciona cupom de desconto ao carrinho de compras",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "cartId",
+            "in": "path",
+            "description": "ID do carrinho de compras",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Código do cupom",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "couponCode": {
+                  "type": "string",
+                  "maxLength": 5,
+                  "default": "VEFJY"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Carrinho de compras",
+            "schema": {
+              "$ref": "#/definitions/Cart"
+            }
+          },
+          "400": {
+            "description": "Erros de validação",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string"
+                      },
+                      "message": {
+                        "type": "string"
+                      },
+                      "field": {
+                        "type": "string"
+                      }
+                    },
+                    "default": [
+                      {
+                        "type": "FieldValidationError",
+                        "message": "id must be a UUID",
+                        "field": "id"
+                      },
+                      {
+                        "type": "FieldValidationError",
+                        "message": "couponCode must be shorter than or equal to 5 characters",
+                        "field": "couponCode"
+                      },
+                      {
+                        "type": "FieldValidationError",
+                        "message": "couponCode should not be empty",
+                        "field": "couponCode"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "400 ": {
+            "description": "Código do cupom não é válido",
+            "schema": {
+              "$ref": "#/definitions/CouponCodeInvalidError"
+            }
+          },
+          "404 ": {
+            "description": "Carrinho de compras não existe",
+            "schema": {
+              "$ref": "#/definitions/CartNotExistsError"
+            }
+          }
+        }
+      }
+    },
+    "/carts/{cartId}/items": {
+      "post": {
+        "tags": [
+          "Itens do carrinho"
+        ],
+        "summary": "Adiciona novo item ao carrinho de compras",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "cartId",
+            "in": "path",
+            "description": "ID do carrinho de compras",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "ID do produto e quantidade",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "productId": {
+                  "type": "string",
+                  "format": "uuid",
+                  "default": "779d7f21-05b7-4a74-82e5-68b43c7d42d4"
+                },
+                "quantity": {
+                  "type": "number",
+                  "minimum": 1
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Item do carrinho de compras",
+            "schema": {
+              "$ref": "#/definitions/CartItem"
+            }
+          },
+          "400": {
+            "description": "Erros de validação",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string"
+                      },
+                      "message": {
+                        "type": "string"
+                      },
+                      "field": {
+                        "type": "string"
+                      }
+                    },
+                    "default": [
+                      {
+                        "type": "FieldValidationError",
+                        "message": "cartId must be a UUID",
+                        "field": "cartId"
+                      },
+                      {
+                        "type": "FieldValidationError",
+                        "message": "productId must be a UUID",
+                        "field": "productId"
+                      },
+                      {
+                        "type": "FieldValidationError",
+                        "message": "productId should not be empty",
+                        "field": "productId"
+                      },
+                      {
+                        "type": "FieldValidationError",
+                        "message": "quantity must be a positive number",
+                        "field": "quantity"
+                      },
+                      {
+                        "type": "FieldValidationError",
+                        "message": "quantity must be an integer number",
+                        "field": "quantity"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "400 ": {
+            "description": "Produto já adicionado ao carrinho de compras",
+            "schema": {
+              "$ref": "#/definitions/CartItemAlreadyExistsError"
+            }
+          },
+          "400  ": {
+            "description": "Produto informado não possui estoque suficiente",
+            "schema": {
+              "$ref": "#/definitions/ProductStockUnavailableError"
+            }
+          },
+          "404 ": {
+            "description": "Carrinho de compras não existe",
+            "schema": {
+              "$ref": "#/definitions/CartNotExistsError"
+            }
+          },
+          "404  ": {
+            "description": "Produto não existe",
+            "schema": {
+              "$ref": "#/definitions/ProductNotExistsError"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Itens do carrinho"
+        ],
+        "summary": "Limpa carrinho de compras",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "cartId",
+            "in": "path",
+            "description": "ID do carrinho de compras",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Sucesso"
+          },
+          "400": {
+            "description": "Erros de validação",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string"
+                      },
+                      "message": {
+                        "type": "string"
+                      },
+                      "field": {
+                        "type": "string"
+                      }
+                    },
+                    "default": [
+                      {
+                        "type": "FieldValidationError",
+                        "message": "cartId must be a UUID",
+                        "field": "cartId"
+                      },
+                      {
+                        "type": "FieldValidationError",
+                        "message": "cartId should not be empty",
+                        "field": "cartId"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Carrinho de compras não existe",
+            "schema": {
+              "$ref": "#/definitions/CartNotExistsError"
+            }
+          }
+        }
+      }
+    },
+    "/carts/{cartId}/items/{productId}": {
+      "put": {
+        "tags": [
+          "Itens do carrinho"
+        ],
+        "summary": "Atualiza item específico do carrinho de compras",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "cartId",
+            "in": "path",
+            "description": "ID do carrinho de compras",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "productId",
+            "in": "path",
+            "description": "ID do produto",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "ID do produto e quantidade",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "quantity": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Item atualizado do carrinho de compras",
+            "schema": {
+              "$ref": "#/definitions/CartItem"
+            }
+          },
+          "400": {
+            "description": "Erros de validação",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string"
+                      },
+                      "message": {
+                        "type": "string"
+                      },
+                      "field": {
+                        "type": "string"
+                      }
+                    },
+                    "default": [
+                      {
+                        "type": "FieldValidationError",
+                        "message": "cartId must be a UUID",
+                        "field": "cartId"
+                      },
+                      {
+                        "type": "FieldValidationError",
+                        "message": "productId must be a UUID",
+                        "field": "productId"
+                      },
+                      {
+                        "type": "FieldValidationError",
+                        "message": "productId should not be empty",
+                        "field": "productId"
+                      },
+                      {
+                        "type": "FieldValidationError",
+                        "message": "quantity must be a positive number",
+                        "field": "quantity"
+                      },
+                      {
+                        "type": "FieldValidationError",
+                        "message": "quantity must be an integer number",
+                        "field": "quantity"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "400  ": {
+            "description": "Produto informado não possui estoque suficiente",
+            "schema": {
+              "$ref": "#/definitions/ProductStockUnavailableError"
+            }
+          },
+          "404 ": {
+            "description": "Item do carrinho de compras não existe",
+            "schema": {
+              "$ref": "#/definitions/CartItemNotExistsError"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Itens do carrinho"
+        ],
+        "summary": "Remove item específico do carrinho",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "cartId",
+            "in": "path",
+            "description": "ID do carrinho de compras",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "productId",
+            "in": "path",
+            "description": "ID do produto",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Sucesso"
+          },
+          "400": {
+            "description": "Erros de validação",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string"
+                      },
+                      "message": {
+                        "type": "string"
+                      },
+                      "field": {
+                        "type": "string"
+                      }
+                    },
+                    "default": [
+                      {
+                        "type": "FieldValidationError",
+                        "message": "cartId must be a UUID",
+                        "field": "cartId"
+                      },
+                      {
+                        "type": "FieldValidationError",
+                        "message": "cartId should not be empty",
+                        "field": "cartId"
+                      },
+                      {
+                        "type": "FieldValidationError",
+                        "message": "productId must be a UUID",
+                        "field": "productId"
+                      },
+                      {
+                        "type": "FieldValidationError",
+                        "message": "productId should not be empty",
+                        "field": "productId"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Carrinho de compras não existe",
+            "schema": {
+              "$ref": "#/definitions/CartNotExistsError"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Coupon": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "percentage": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+    "Product": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "stock": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "price": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+    "CartItem": {
+      "type": "object",
+      "properties": {
+        "cartId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "productId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "product": {
+          "$ref": "#/definitions/Product"
+        },
+        "total": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "Cart": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "coupon": {
+          "$ref": "#/definitions/Coupon"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CartItem"
+          }
+        },
+        "subtotal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "total": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "CartItemAlreadyExistsError": {
+      "type": "object",
+      "properties": {
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              }
+            },
+            "default": [
+              {
+                "type": "CartItemAlreadyExistsError",
+                "message": "Cart item from cart e8e06854-688d-4984-a26b-91e3c8869ac2 with product 779d7f21-05b7-4a74-82e5-68b43c7d42d4 already exists"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "ProductStockUnavailableError": {
+      "type": "object",
+      "properties": {
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              }
+            },
+            "default": [
+              {
+                "type": "ProductStockUnavailableError",
+                "message": "Product 779d7f21-05b7-4a74-82e5-68b43c7d42d4 does not have enough stock"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "CouponCodeInvalidError": {
+      "type": "object",
+      "properties": {
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              }
+            },
+            "default": [
+              {
+                "type": "CouponCodeInvalidError",
+                "message": "Coupon VEFJY is invalid"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "CartNotExistsError": {
+      "type": "object",
+      "properties": {
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              }
+            },
+            "default": [
+              {
+                "type": "CartNotExistsError",
+                "message": "Cart e8e06854-688d-4984-a26b-91e3c8869ac2 does not exist"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "CartItemNotExistsError": {
+      "type": "object",
+      "properties": {
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              }
+            },
+            "default": [
+              {
+                "type": "CartItemNotExistsError",
+                "message": "Cart item from cart e8e06854-688d-4984-a26b-91e3c8869ac2 with product 779d7f21-05b7-4a74-82e5-68b43c7d42d4 does not exist"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "ProductNotExistsError": {
+      "type": "object",
+      "properties": {
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              }
+            },
+            "default": [
+              {
+                "type": "ProductNotExistsError",
+                "message": "Product 779d7f21-05b7-4a74-82e5-68b43c7d42d4 does not exist"
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}
