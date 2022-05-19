@@ -1,7 +1,6 @@
 {
   "name": "loja-integrada-carrinho",
   "version": "1.0.0",
-  "main": "index.js",
   "author": "Vinicius Meneses <vinicius.meneses04@gmail.com>",
   "license": "MIT",
   "engines": {
@@ -11,7 +10,7 @@
     "dev": "cross-env NODE_ENV=development ts-node-dev -r tsconfig-paths/register --inspect --respawn src/main/server.ts",
     "test": "jest --passWithNoTests",
     "test:unit": "yarn test --watch",
-    "test:coverage": "yarn test --coverage",
+    "test:coverage": "yarn test --coverage && jest-coverage-badges output './badges'",
     "test:e2e": "yarn test --watch --silent --runInBand -c jest-e2e.config.js",
     "migration:create": "typeorm migration:create",
     "migration:run": "yarn typeorm:data-source migration:run",
@@ -51,6 +50,7 @@
     "express": "^4.18.1",
     "express-async-errors": "^3.1.1",
     "helmet": "^5.0.2",
+    "jest-coverage-badges": "^1.1.2",
     "pg": "^8.7.3",
     "rambda": "^7.1.4",
     "reflect-metadata": "^0.1.13",

@@ -9,7 +9,7 @@ module.exports = {
     "!src/infra/database/postgres/{migrations,config}/*.ts",
     "!src/infra/database/postgres/dataSource.ts",
   ],
-  coverageReporters: ["lcov", "text"],
+  coverageReporters: ["lcov", "text", "json-summary"],
   testMatch: ["**/*.spec.ts"],
   testEnvironment: "node",
   clearMocks: true,
