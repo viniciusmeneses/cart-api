@@ -64,7 +64,7 @@ describe("ApplyCouponToCartUseCase", () => {
     await sut.execute({ id: fakeCart.id, couponCode: fakeCoupon.code });
 
     expect(cartsRepositoryMock.findById).toBeCalledTimes(1);
-    expect(cartsRepositoryMock.findById).toBeCalledWith(fakeCart.id);
+    expect(cartsRepositoryMock.findById).toBeCalledWith(fakeCart.id, { withItems: false });
   });
 
   it("Should throw CartNotExistsError if cart id does not exists", async () => {

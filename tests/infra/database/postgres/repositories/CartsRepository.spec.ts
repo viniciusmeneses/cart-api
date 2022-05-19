@@ -70,6 +70,16 @@ describe("CartsRepository", () => {
       expect(cartsRepositoryMock.findOne).toHaveBeenCalledTimes(1);
     });
 
+    it("Should call Repository.findOne without eager loading cart items", async () => {
+      const sut = makeSut();
+      await sut.findById(fakeCart.id, { withItems: false });
+      expect(cartsRepositoryMock.findOne).toHaveBeenCalledTimes(1);
+      expect(cartsRepositoryMock.findOne).toHaveBeenCalledWith({
+        where: { id: fakeCart.id },
+        relations: { coupon: true, items: false },
+      });
+    });
+
     it("Should throw if Repository.findOne throws", async () => {
       const sut = makeSut();
       jest.spyOn(cartsRepositoryMock, "findOne").mockRejectedValueOnce(new Error());
