@@ -8,7 +8,6 @@
     "node": "16.x"
   },
   "scripts": {
-    "start": "tsc && cross-env NODE_ENV=production node dist/src/main/server.js",
     "dev": "cross-env NODE_ENV=development ts-node-dev -r tsconfig-paths/register --inspect --respawn src/main/server.ts",
     "test": "jest --passWithNoTests",
     "test:unit": "yarn test --watch",
