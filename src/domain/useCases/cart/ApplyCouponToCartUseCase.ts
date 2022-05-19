@@ -16,7 +16,7 @@ export class ApplyCouponToCartUseCase implements IApplyCouponToCartUseCase {
 
   @ValidateInputs
   public async execute({ id, couponCode }: IApplyCouponToCartUseCase.Input): Promise<Cart> {
-    const cart = await this.cartsRepository.findById(id);
+    const cart = await this.cartsRepository.findById(id, { withItems: false });
     if (cart == null) throw new CartNotExistsError(id);
 
     const coupon = await this.couponsRepository.findByCode(couponCode);

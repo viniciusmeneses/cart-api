@@ -14,11 +14,11 @@ export class CartItem {
 
   @ManyToOne(() => Cart, { onDelete: "CASCADE" })
   @JoinColumn({ name: "cart_id" })
-  public cart: Cart;
+  public cart?: Cart;
 
   @ManyToOne(() => Product, { onDelete: "CASCADE" })
   @JoinColumn({ name: "product_id" })
-  public product: Product;
+  public product?: Product;
 
   @Column({ type: "integer" })
   public quantity: number;
@@ -33,6 +33,6 @@ export class CartItem {
 
   @Expose()
   public get total(): number {
-    return this.product.price * this.quantity;
+    return (this.product?.price ?? 0) * this.quantity;
   }
 }

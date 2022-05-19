@@ -18,9 +18,10 @@ export class Cart {
   public id: string;
 
   @OneToMany(() => CartItem, (item) => item.cart, { cascade: true })
-  public items: CartItem[];
+  public items?: CartItem[];
 
-  @Column({ name: "coupon_id" })
+  @Exclude()
+  @Column({ name: "coupon_id", nullable: true })
   public couponId?: string;
 
   @ManyToOne(() => Coupon, { onDelete: "SET NULL" })
@@ -36,11 +37,12 @@ export class Cart {
 
   @Expose()
   public get subtotal(): number {
-    return this.items.reduce((total, item) => total + item.total, 0.0);
+    return this.items?.reduce((subtotal, item) => subtotal + item.total, 0) ?? 0;
   }
 
   @Expose()
   public get total(): number {
-    return this.subtotal - this.subtotal * (this.coupon?.percentage ?? 0 / 100);
+    const couponPercentage = this.coupon?.percentage ?? 0;
+    return this.subtotal - this.subtotal * (couponPercentage / 100);
   }
 }

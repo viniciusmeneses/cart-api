@@ -2,7 +2,7 @@ import { singleton } from "tsyringe";
 import { Repository as OrmRepository } from "typeorm";
 
 import { Cart } from "@domain/entities/Cart";
-import { ICartsRepository, ICreateCartInput } from "@domain/ports/repositories";
+import { ICartsRepository, ICreateCartInput, IFindCartByIdOptions } from "@domain/ports/repositories";
 
 import { Repository } from "../Repository";
 
@@ -14,10 +14,10 @@ export class CartsRepository extends Repository implements ICartsRepository {
     return this.findById(cart.id);
   }
 
-  public async findById(id: string): Promise<Cart> {
+  public async findById(id: string, options: IFindCartByIdOptions = { withItems: true }): Promise<Cart> {
     return this.repository.findOne({
       where: { id },
-      relations: { coupon: true, items: { product: true } },
+      relations: { coupon: true, items: options.withItems ? { product: true } : false },
     });
   }
 
