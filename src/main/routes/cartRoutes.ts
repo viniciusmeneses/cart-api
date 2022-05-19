@@ -1,9 +1,8 @@
 import { Router } from "express";
-import { container } from "tsyringe";
 
 import { adaptExpressRoute } from "@main/helpers";
 import {
-  AddCouponToCartController,
+  ApplyCouponToCartController,
   CreateCartController,
   CreateCartItemController,
   LoadCartController,
@@ -13,15 +12,15 @@ import {
 
 const cartRoutes = Router();
 
-cartRoutes.post("/", adaptExpressRoute(container.resolve(CreateCartController)));
-cartRoutes.post("/:cartId/items", adaptExpressRoute(container.resolve(CreateCartItemController)));
+cartRoutes.post("/", adaptExpressRoute(CreateCartController));
+cartRoutes.get("/:cartId", adaptExpressRoute(LoadCartController));
 
-cartRoutes.get("/:cartId", adaptExpressRoute(container.resolve(LoadCartController)));
+cartRoutes.post("/:cartId/apply-coupon", adaptExpressRoute(ApplyCouponToCartController));
 
-cartRoutes.delete("/:cartId/items", adaptExpressRoute(container.resolve(RemoveCartItemsController)));
-cartRoutes.delete("/:cartId/items/:productId", adaptExpressRoute(container.resolve(RemoveCartItemsController)));
+cartRoutes.post("/:cartId/items", adaptExpressRoute(CreateCartItemController));
+cartRoutes.delete("/:cartId/items", adaptExpressRoute(RemoveCartItemsController));
 
-cartRoutes.patch("/:cartId/items/:productId", adaptExpressRoute(container.resolve(UpdateCartItemController)));
-cartRoutes.patch("/:cartId", adaptExpressRoute(container.resolve(AddCouponToCartController)));
+cartRoutes.put("/:cartId/items/:productId", adaptExpressRoute(UpdateCartItemController));
+cartRoutes.delete("/:cartId/items/:productId", adaptExpressRoute(RemoveCartItemsController));
 
 export { cartRoutes };

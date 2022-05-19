@@ -1,12 +1,12 @@
 import { plainToInstance } from "class-transformer";
 
-import { IAddCouponToCartUseCase } from "@domain/ports/useCases/cart";
+import { IApplyCouponToCartUseCase } from "@domain/ports/useCases/cart";
 import faker from "@faker-js/faker";
 
 import { validateSut } from "../../helpers";
 
-describe("AddCouponToCartUseCase.Input", () => {
-  const makeSut = (data: IAddCouponToCartUseCase.Input) => plainToInstance(IAddCouponToCartUseCase.Input, data);
+describe("ApplyCouponToCartUseCase.Input", () => {
+  const makeSut = (data: IApplyCouponToCartUseCase.Input) => plainToInstance(IApplyCouponToCartUseCase.Input, data);
 
   describe("id", () => {
     it("Should throw if id is not an uuid", async () => {

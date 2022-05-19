@@ -1,4 +1,4 @@
-export * from "./AddCouponToCartUseCase";
+export * from "./ApplyCouponToCartUseCase";
 export * from "./CreateCartItemUseCase";
 export * from "./CreateCartUseCase";
 export * from "./LoadCartUseCase";

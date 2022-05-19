@@ -1,10 +1,10 @@
 import { plainToInstance } from "class-transformer";
 import { F } from "rambda";
 
-import { AddCouponToCartUseCase } from "@domain/useCases/cart";
+import { ApplyCouponToCartUseCase } from "@domain/useCases/cart";
 import faker from "@faker-js/faker";
 import { CartsRepository, CouponsRepository } from "@infra/database/postgres";
-import { AddCouponToCartController } from "@presentation/controllers/cart";
+import { ApplyCouponToCartController } from "@presentation/controllers/cart";
 import { HttpErrorHandler, HttpResponse } from "@presentation/helpers";
 import { makeFakeCart, makeFakeCoupon } from "@tests/domain/fakes";
 
@@ -13,11 +13,11 @@ jest.mock("@infra/database/postgres");
 
 jest.spyOn(HttpErrorHandler, "handleCartError");
 
-type MockedAddCouponToCartUseCase = jest.Mocked<AddCouponToCartUseCase>;
+type MockedApplyCouponToCartUseCase = jest.Mocked<ApplyCouponToCartUseCase>;
 
 interface ISutTypes {
-  sut: AddCouponToCartController;
-  addCouponToCartUseCaseMock: MockedAddCouponToCartUseCase;
+  sut: ApplyCouponToCartController;
+  applyCouponToCartUseCaseMock: MockedApplyCouponToCartUseCase;
 }
 
 const fakeCart = makeFakeCart({
@@ -25,30 +25,30 @@ const fakeCart = makeFakeCart({
   coupon: makeFakeCoupon({ id: faker.random.alphaNumeric(5) }),
 });
 
-const fakeRequest: AddCouponToCartController.IRequest = {
+const fakeRequest: ApplyCouponToCartController.IRequest = {
   url: { params: { cartId: fakeCart.id }, query: null },
   body: { couponCode: fakeCart.coupon.code },
 };
 
-const makeAddCouponToCartUseCaseMock = () => {
-  const addCouponToCartUseCaseMock = new AddCouponToCartUseCase(
+const makeApplyCouponToCartUseCaseMock = () => {
+  const applyCouponToCartUseCaseMock = new ApplyCouponToCartUseCase(
     new CartsRepository(),
     new CouponsRepository()
-  ) as MockedAddCouponToCartUseCase;
-  addCouponToCartUseCaseMock.execute.mockResolvedValue(fakeCart);
-  return addCouponToCartUseCaseMock;
+  ) as MockedApplyCouponToCartUseCase;
+  applyCouponToCartUseCaseMock.execute.mockResolvedValue(fakeCart);
+  return applyCouponToCartUseCaseMock;
 };
 
 const makeSut = (): ISutTypes => {
-  const addCouponToCartUseCaseMock = makeAddCouponToCartUseCaseMock();
-  const sut = new AddCouponToCartController(addCouponToCartUseCaseMock);
-  return { sut, addCouponToCartUseCaseMock };
+  const applyCouponToCartUseCaseMock = makeApplyCouponToCartUseCaseMock();
+  const sut = new ApplyCouponToCartController(applyCouponToCartUseCaseMock);
+  return { sut, applyCouponToCartUseCaseMock };
 };
 
-describe("AddCouponToCartController", () => {
-  it("Should call AddCouponToCartUseCase.execute with dto", async () => {
-    const { sut, addCouponToCartUseCaseMock } = makeSut();
-    const useCaseSpy = jest.spyOn(addCouponToCartUseCaseMock, "execute");
+describe("ApplyCouponToCartController", () => {
+  it("Should call ApplyCouponToCartUseCase.execute with dto", async () => {
+    const { sut, applyCouponToCartUseCaseMock } = makeSut();
+    const useCaseSpy = jest.spyOn(applyCouponToCartUseCaseMock, "execute");
 
     await sut.handle(fakeRequest);
 
@@ -57,10 +57,10 @@ describe("AddCouponToCartController", () => {
   });
 
   it("Should call HttpErrorHandler.handleCartError if use case throws", async () => {
-    const { sut, addCouponToCartUseCaseMock } = makeSut();
+    const { sut, applyCouponToCartUseCaseMock } = makeSut();
     const fakeError = new Error();
 
-    jest.spyOn(addCouponToCartUseCaseMock, "execute").mockRejectedValueOnce(fakeError);
+    jest.spyOn(applyCouponToCartUseCaseMock, "execute").mockRejectedValueOnce(fakeError);
     await sut.handle(fakeRequest).catch(F);
 
     expect(HttpErrorHandler.handleCartError).toHaveBeenCalledTimes(1);

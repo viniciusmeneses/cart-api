@@ -2,7 +2,7 @@ import { plainToInstance } from "class-transformer";
 
 import { Cart } from "@domain/entities/Cart";
 import { ICartsRepository, ICouponsRepository } from "@domain/ports/repositories";
-import { AddCouponToCartUseCase } from "@domain/useCases/cart";
+import { ApplyCouponToCartUseCase } from "@domain/useCases/cart";
 import { CartNotExistsError, CouponCodeInvalidError } from "@domain/useCases/errors";
 import { ValidationErrors } from "@domain/validator";
 import faker from "@faker-js/faker";
@@ -16,7 +16,7 @@ type MockedICartsRepository = jest.Mocked<ICartsRepository>;
 type MockedICouponsRepository = jest.Mocked<ICouponsRepository>;
 
 interface ISutTypes {
-  sut: AddCouponToCartUseCase;
+  sut: ApplyCouponToCartUseCase;
   cartsRepositoryMock: MockedICartsRepository;
   couponsRepositoryMock: MockedICouponsRepository;
 }
@@ -48,11 +48,11 @@ const makeCouponsRepositoryMock = () => {
 const makeSut = (): ISutTypes => {
   const cartsRepositoryMock = makeCartsRepositoryMock();
   const couponsRepositoryMock = makeCouponsRepositoryMock();
-  const sut = new AddCouponToCartUseCase(cartsRepositoryMock, couponsRepositoryMock);
+  const sut = new ApplyCouponToCartUseCase(cartsRepositoryMock, couponsRepositoryMock);
   return { sut, cartsRepositoryMock, couponsRepositoryMock };
 };
 
-describe("AddCouponToCartUseCase", () => {
+describe("ApplyCouponToCartUseCase", () => {
   it("Should throw ValidationErrors if any param is invalid", async () => {
     const { sut } = makeSut();
     const promise = sut.execute({ id: null, couponCode: null });

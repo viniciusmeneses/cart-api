@@ -7,7 +7,7 @@ import {
   IProductsRepository,
 } from "@domain/ports/repositories";
 import {
-  IAddCouponToCartUseCase,
+  IApplyCouponToCartUseCase,
   ICreateCartItemUseCase,
   ICreateCartUseCase,
   ILoadCartUseCase,
@@ -15,7 +15,7 @@ import {
   IUpdateCartItemUseCase,
 } from "@domain/ports/useCases/cart";
 import {
-  AddCouponToCartUseCase,
+  ApplyCouponToCartUseCase,
   CreateCartItemUseCase,
   CreateCartUseCase,
   LoadCartUseCase,
@@ -31,7 +31,7 @@ container.registerSingleton<ICouponsRepository>("CouponsRepository", CouponsRepo
 
 container.registerSingleton<ICreateCartUseCase>("CreateCartUseCase", CreateCartUseCase);
 container.registerSingleton<ILoadCartUseCase>("LoadCartUseCase", LoadCartUseCase);
-container.registerSingleton<IAddCouponToCartUseCase>("AddCouponToCartUseCase", AddCouponToCartUseCase);
+container.registerSingleton<IApplyCouponToCartUseCase>("ApplyCouponToCartUseCase", ApplyCouponToCartUseCase);
 
 container.registerSingleton<ICreateCartItemUseCase>("CreateCartItemUseCase", CreateCartItemUseCase);
 container.registerSingleton<IUpdateCartItemUseCase>("UpdateCartItemUseCase", UpdateCartItemUseCase);

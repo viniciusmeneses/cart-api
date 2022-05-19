@@ -2,11 +2,11 @@ import { IsNotEmpty, IsUUID, MaxLength } from "class-validator";
 
 import { Cart } from "@domain/entities/Cart";
 
-export interface IAddCouponToCartUseCase {
-  execute(dto?: IAddCouponToCartUseCase.Input): Promise<IAddCouponToCartUseCase.Result>;
+export interface IApplyCouponToCartUseCase {
+  execute(dto?: IApplyCouponToCartUseCase.Input): Promise<IApplyCouponToCartUseCase.Result>;
 }
 
-export namespace IAddCouponToCartUseCase {
+export namespace IApplyCouponToCartUseCase {
   export class Input {
     @IsNotEmpty()
     @IsUUID()
