@@ -1,9 +1,9 @@
 {
   "swagger": "2.0",
   "info": {
-    "description": "API REST desenvolvida como desafio técnico da Loja Integrada que representa o funcionamento de um carrinho de compras. O projeto foi desenvolvido com a stack Typescript + Node.js + Express.js e aplicando os conceitos da Clean Architecture e os princípios SOLID.",
+    "description": "API REST desenvolvida como desafio técnico da Loja Integrada que representa o funcionamento de um carrinho de compras. O projeto foi desenvolvido com a stack Typescript + Node.js + PostgreSQL e aplicando os conceitos da Clean Architecture e os princípios SOLID.",
     "version": "1.0.0",
-    "title": "Loja Integrada"
+    "title": "Loja Integrada - Carrinho"
   },
   "basePath": "/api",
   "tags": [
