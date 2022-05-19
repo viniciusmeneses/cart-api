@@ -3,6 +3,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -24,7 +25,8 @@ export class Cart {
   @Column({ name: "coupon_id", nullable: true })
   public couponId?: string;
 
-  @ManyToOne(() => Coupon, { onDelete: "SET NULL" })
+  @ManyToOne(() => Coupon, { onDelete: "SET NULL", nullable: true })
+  @JoinColumn({ name: "coupon_id" })
   public coupon?: Coupon;
 
   @Exclude()
