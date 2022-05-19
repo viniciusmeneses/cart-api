@@ -15,7 +15,7 @@ const cartRoutes = Router();
 cartRoutes.post("/", adaptExpressRoute(CreateCartController));
 cartRoutes.get("/:cartId", adaptExpressRoute(LoadCartController));
 
-cartRoutes.post("/:cartId/apply-coupon", adaptExpressRoute(ApplyCouponToCartController));
+cartRoutes.post("/:cartId/applyCoupon", adaptExpressRoute(ApplyCouponToCartController));
 
 cartRoutes.post("/:cartId/items", adaptExpressRoute(CreateCartItemController));
 cartRoutes.delete("/:cartId/items", adaptExpressRoute(RemoveCartItemsController));
