@@ -83,25 +83,25 @@
                       "field": {
                         "type": "string"
                       }
+                    }
+                  },
+                  "default": [
+                    {
+                      "type": "FieldValidationError",
+                      "message": "productId must be a UUID",
+                      "field": "items[0].productId"
                     },
-                    "default": [
-                      {
-                        "type": "FieldValidationError",
-                        "message": "productId must be a UUID",
-                        "field": "items[0].productId"
-                      },
-                      {
-                        "type": "FieldValidationError",
-                        "message": "productId should not be empty",
-                        "field": "items[0].productId"
-                      },
-                      {
-                        "type": "FieldValidationError",
-                        "message": "quantity must be a positive number",
-                        "field": "items[0].quantity"
-                      }
-                    ]
-                  }
+                    {
+                      "type": "FieldValidationError",
+                      "message": "productId should not be empty",
+                      "field": "items[0].productId"
+                    },
+                    {
+                      "type": "FieldValidationError",
+                      "message": "quantity must be a positive number",
+                      "field": "items[0].quantity"
+                    }
+                  ]
                 }
               }
             }
@@ -166,15 +166,15 @@
                       "field": {
                         "type": "string"
                       }
-                    },
-                    "default": [
-                      {
-                        "type": "FieldValidationError",
-                        "message": "id must be a UUID",
-                        "field": "id"
-                      }
-                    ]
-                  }
+                    }
+                  },
+                  "default": [
+                    {
+                      "type": "FieldValidationError",
+                      "message": "id must be a UUID",
+                      "field": "id"
+                    }
+                  ]
                 }
               }
             }
@@ -249,25 +249,25 @@
                       "field": {
                         "type": "string"
                       }
+                    }
+                  },
+                  "default": [
+                    {
+                      "type": "FieldValidationError",
+                      "message": "id must be a UUID",
+                      "field": "id"
                     },
-                    "default": [
-                      {
-                        "type": "FieldValidationError",
-                        "message": "id must be a UUID",
-                        "field": "id"
-                      },
-                      {
-                        "type": "FieldValidationError",
-                        "message": "couponCode must be shorter than or equal to 5 characters",
-                        "field": "couponCode"
-                      },
-                      {
-                        "type": "FieldValidationError",
-                        "message": "couponCode should not be empty",
-                        "field": "couponCode"
-                      }
-                    ]
-                  }
+                    {
+                      "type": "FieldValidationError",
+                      "message": "couponCode must be shorter than or equal to 5 characters",
+                      "field": "couponCode"
+                    },
+                    {
+                      "type": "FieldValidationError",
+                      "message": "couponCode should not be empty",
+                      "field": "couponCode"
+                    }
+                  ]
                 }
               }
             }
@@ -352,35 +352,35 @@
                       "field": {
                         "type": "string"
                       }
+                    }
+                  },
+                  "default": [
+                    {
+                      "type": "FieldValidationError",
+                      "message": "cartId must be a UUID",
+                      "field": "cartId"
                     },
-                    "default": [
-                      {
-                        "type": "FieldValidationError",
-                        "message": "cartId must be a UUID",
-                        "field": "cartId"
-                      },
-                      {
-                        "type": "FieldValidationError",
-                        "message": "productId must be a UUID",
-                        "field": "productId"
-                      },
-                      {
-                        "type": "FieldValidationError",
-                        "message": "productId should not be empty",
-                        "field": "productId"
-                      },
-                      {
-                        "type": "FieldValidationError",
-                        "message": "quantity must be a positive number",
-                        "field": "quantity"
-                      },
-                      {
-                        "type": "FieldValidationError",
-                        "message": "quantity must be an integer number",
-                        "field": "quantity"
-                      }
-                    ]
-                  }
+                    {
+                      "type": "FieldValidationError",
+                      "message": "productId must be a UUID",
+                      "field": "productId"
+                    },
+                    {
+                      "type": "FieldValidationError",
+                      "message": "productId should not be empty",
+                      "field": "productId"
+                    },
+                    {
+                      "type": "FieldValidationError",
+                      "message": "quantity must be a positive number",
+                      "field": "quantity"
+                    },
+                    {
+                      "type": "FieldValidationError",
+                      "message": "quantity must be an integer number",
+                      "field": "quantity"
+                    }
+                  ]
                 }
               }
             }
@@ -452,20 +452,20 @@
                       "field": {
                         "type": "string"
                       }
+                    }
+                  },
+                  "default": [
+                    {
+                      "type": "FieldValidationError",
+                      "message": "cartId must be a UUID",
+                      "field": "cartId"
                     },
-                    "default": [
-                      {
-                        "type": "FieldValidationError",
-                        "message": "cartId must be a UUID",
-                        "field": "cartId"
-                      },
-                      {
-                        "type": "FieldValidationError",
-                        "message": "cartId should not be empty",
-                        "field": "cartId"
-                      }
-                    ]
-                  }
+                    {
+                      "type": "FieldValidationError",
+                      "message": "cartId should not be empty",
+                      "field": "cartId"
+                    }
+                  ]
                 }
               }
             }
@@ -547,35 +547,35 @@
                       "field": {
                         "type": "string"
                       }
+                    }
+                  },
+                  "default": [
+                    {
+                      "type": "FieldValidationError",
+                      "message": "cartId must be a UUID",
+                      "field": "cartId"
                     },
-                    "default": [
-                      {
-                        "type": "FieldValidationError",
-                        "message": "cartId must be a UUID",
-                        "field": "cartId"
-                      },
-                      {
-                        "type": "FieldValidationError",
-                        "message": "productId must be a UUID",
-                        "field": "productId"
-                      },
-                      {
-                        "type": "FieldValidationError",
-                        "message": "productId should not be empty",
-                        "field": "productId"
-                      },
-                      {
-                        "type": "FieldValidationError",
-                        "message": "quantity must be a positive number",
-                        "field": "quantity"
-                      },
-                      {
-                        "type": "FieldValidationError",
-                        "message": "quantity must be an integer number",
-                        "field": "quantity"
-                      }
-                    ]
-                  }
+                    {
+                      "type": "FieldValidationError",
+                      "message": "productId must be a UUID",
+                      "field": "productId"
+                    },
+                    {
+                      "type": "FieldValidationError",
+                      "message": "productId should not be empty",
+                      "field": "productId"
+                    },
+                    {
+                      "type": "FieldValidationError",
+                      "message": "quantity must be a positive number",
+                      "field": "quantity"
+                    },
+                    {
+                      "type": "FieldValidationError",
+                      "message": "quantity must be an integer number",
+                      "field": "quantity"
+                    }
+                  ]
                 }
               }
             }
@@ -643,30 +643,30 @@
                       "field": {
                         "type": "string"
                       }
+                    }
+                  },
+                  "default": [
+                    {
+                      "type": "FieldValidationError",
+                      "message": "cartId must be a UUID",
+                      "field": "cartId"
                     },
-                    "default": [
-                      {
-                        "type": "FieldValidationError",
-                        "message": "cartId must be a UUID",
-                        "field": "cartId"
-                      },
-                      {
-                        "type": "FieldValidationError",
-                        "message": "cartId should not be empty",
-                        "field": "cartId"
-                      },
-                      {
-                        "type": "FieldValidationError",
-                        "message": "productId must be a UUID",
-                        "field": "productId"
-                      },
-                      {
-                        "type": "FieldValidationError",
-                        "message": "productId should not be empty",
-                        "field": "productId"
-                      }
-                    ]
-                  }
+                    {
+                      "type": "FieldValidationError",
+                      "message": "cartId should not be empty",
+                      "field": "cartId"
+                    },
+                    {
+                      "type": "FieldValidationError",
+                      "message": "productId must be a UUID",
+                      "field": "productId"
+                    },
+                    {
+                      "type": "FieldValidationError",
+                      "message": "productId should not be empty",
+                      "field": "productId"
+                    }
+                  ]
                 }
               }
             }
@@ -781,12 +781,10 @@
                 "type": "string"
               }
             },
-            "default": [
-              {
-                "type": "CartItemAlreadyExistsError",
-                "message": "Cart item from cart e8e06854-688d-4984-a26b-91e3c8869ac2 with product 779d7f21-05b7-4a74-82e5-68b43c7d42d4 already exists"
-              }
-            ]
+            "default": {
+              "type": "CartItemAlreadyExistsError",
+              "message": "Cart item from cart e8e06854-688d-4984-a26b-91e3c8869ac2 with product 779d7f21-05b7-4a74-82e5-68b43c7d42d4 already exists"
+            }
           }
         }
       }
@@ -806,12 +804,10 @@
                 "type": "string"
               }
             },
-            "default": [
-              {
-                "type": "ProductStockUnavailableError",
-                "message": "Product 779d7f21-05b7-4a74-82e5-68b43c7d42d4 does not have enough stock"
-              }
-            ]
+            "default": {
+              "type": "ProductStockUnavailableError",
+              "message": "Product 779d7f21-05b7-4a74-82e5-68b43c7d42d4 does not have enough stock"
+            }
           }
         }
       }
@@ -831,12 +827,10 @@
                 "type": "string"
               }
             },
-            "default": [
-              {
-                "type": "CouponCodeInvalidError",
-                "message": "Coupon VEFJY is invalid"
-              }
-            ]
+            "default": {
+              "type": "CouponCodeInvalidError",
+              "message": "Coupon VEFJY is invalid"
+            }
           }
         }
       }
@@ -856,12 +850,10 @@
                 "type": "string"
               }
             },
-            "default": [
-              {
-                "type": "CartNotExistsError",
-                "message": "Cart e8e06854-688d-4984-a26b-91e3c8869ac2 does not exist"
-              }
-            ]
+            "default": {
+              "type": "CartNotExistsError",
+              "message": "Cart e8e06854-688d-4984-a26b-91e3c8869ac2 does not exist"
+            }
           }
         }
       }
@@ -881,12 +873,10 @@
                 "type": "string"
               }
             },
-            "default": [
-              {
-                "type": "CartItemNotExistsError",
-                "message": "Cart item from cart e8e06854-688d-4984-a26b-91e3c8869ac2 with product 779d7f21-05b7-4a74-82e5-68b43c7d42d4 does not exist"
-              }
-            ]
+            "default": {
+              "type": "CartItemNotExistsError",
+              "message": "Cart item from cart e8e06854-688d-4984-a26b-91e3c8869ac2 with product 779d7f21-05b7-4a74-82e5-68b43c7d42d4 does not exist"
+            }
           }
         }
       }
@@ -906,12 +896,10 @@
                 "type": "string"
               }
             },
-            "default": [
-              {
-                "type": "ProductNotExistsError",
-                "message": "Product 779d7f21-05b7-4a74-82e5-68b43c7d42d4 does not exist"
-              }
-            ]
+            "default": {
+              "type": "ProductNotExistsError",
+              "message": "Product 779d7f21-05b7-4a74-82e5-68b43c7d42d4 does not exist"
+            }
           }
         }
       }
