@@ -7,11 +7,11 @@
 </h4>
 
 <p align="center">
-  <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/viniciusmeneses/donation-chain">
+  <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/viniciusmeneses/loja-integrada-carrinho">
   
-  <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/viniciusmeneses/donation-chain">
+  <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/viniciusmeneses/loja-integrada-carrinho">
     
-  <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/viniciusmeneses/donation-chain">
+  <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/viniciusmeneses/loja-integrada-carrinho">
 
   <img alt="Coverage" src="./badges/badge-lines.svg">
 </p>
