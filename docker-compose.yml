@@ -3,20 +3,20 @@ version: "3.7"
 services:
   database:
     image: postgres
-    container_name: loja-integrada-carrinho-db
+    container_name: cart-api-db
     restart: always
     ports:
       - 5432:5432
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=loja-integrada-carrinho
+      - POSTGRES_DB=cart-api
     volumes:
       - pgdata:/data/postgres
 
   app:
     build: .
-    container_name: loja-integrada-carrinho-api
+    container_name: cart-api
     ports:
       - 3000:3000
       - 9229:9229 # Debugger
